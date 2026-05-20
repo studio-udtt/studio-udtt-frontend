@@ -16,48 +16,82 @@ export default function AdminRequestsPage() {
   const [activeTab, setActiveTab] = useState("projectRequests");
   const [projectRequests, setProjectRequests] = useState([]);
   const [applications, setApplications] = useState([]);
-  const [isLoading, setIsLoading] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
 
-  const fetchProjectRequests = async () => {
+  const loadRequestsData = async ({ showLoading = true } = {}) => {
     try {
-      setIsLoading(true);
+      if (showLoading) {
+        setIsLoading(true);
+      }
 
-      const response = await getAdminProjectRequests({
-        page: 0,
-        size: 20,
-      });
+      const [projectRequestResponse, applicationResponse] = await Promise.all([
+        getAdminProjectRequests({
+          page: 0,
+          size: 20,
+        }),
+        getAdminApplications({
+          page: 0,
+          size: 20,
+        }),
+      ]);
 
-      setProjectRequests(response.data);
+      setProjectRequests(projectRequestResponse.data);
+      setApplications(applicationResponse.data);
     } catch (error) {
-      console.error("의뢰 신청 목록 조회 실패:", error);
+      console.error("신청 관리 목록 조회 실패:", error);
       setProjectRequests([]);
-    } finally {
-      setIsLoading(false);
-    }
-  };
-
-  const fetchApplications = async () => {
-    try {
-      setIsLoading(true);
-
-      const response = await getAdminApplications({
-        page: 0,
-        size: 20,
-      });
-
-      setApplications(response.data);
-    } catch (error) {
-      console.error("참여 신청 목록 조회 실패:", error);
       setApplications([]);
     } finally {
-      setIsLoading(false);
+      if (showLoading) {
+        setIsLoading(false);
+      }
     }
   };
 
   useEffect(() => {
-    fetchProjectRequests();
-    fetchApplications();
+    let ignore = false;
+
+    const loadInitialData = async () => {
+      try {
+        const [projectRequestResponse, applicationResponse] = await Promise.all(
+          [
+            getAdminProjectRequests({
+              page: 0,
+              size: 20,
+            }),
+            getAdminApplications({
+              page: 0,
+              size: 20,
+            }),
+          ],
+        );
+
+        if (!ignore) {
+          setProjectRequests(projectRequestResponse.data);
+          setApplications(applicationResponse.data);
+        }
+      } catch (error) {
+        if (!ignore) {
+          console.error("신청 관리 목록 조회 실패:", error);
+          setProjectRequests([]);
+          setApplications([]);
+        }
+      } finally {
+        if (!ignore) {
+          setIsLoading(false);
+        }
+      }
+    };
+
+    loadInitialData();
+
+    return () => {
+      ignore = true;
+    };
   }, []);
+  const handleRefresh = () => {
+    loadRequestsData();
+  };
 
   const handleApproveProjectRequest = async (requestId) => {
     const title = window.prompt("프로젝트 제목을 입력하세요.");
@@ -89,7 +123,7 @@ export default function AdminRequestsPage() {
     try {
       const response = await approveProjectRequest(requestId, payload);
       alert(response.data.message || "의뢰가 승인되었습니다.");
-      fetchProjectRequests();
+      loadRequestsData();
     } catch (error) {
       console.error("의뢰 승인 실패:", error);
       alert("의뢰 승인 중 오류가 발생했습니다.");
@@ -106,7 +140,7 @@ export default function AdminRequestsPage() {
       });
 
       alert(response.data.message || "의뢰가 반려되었습니다.");
-      fetchProjectRequests();
+      loadRequestsData();
     } catch (error) {
       console.error("의뢰 반려 실패:", error);
       alert("의뢰 반려 중 오류가 발생했습니다.");
@@ -120,7 +154,7 @@ export default function AdminRequestsPage() {
     try {
       const response = await cancelProjectRequest(requestId);
       alert(response.data.message || "의뢰가 취소 처리되었습니다.");
-      fetchProjectRequests();
+      loadRequestsData();
     } catch (error) {
       console.error("의뢰 취소 실패:", error);
       alert("의뢰 취소 중 오류가 발생했습니다.");
@@ -134,7 +168,7 @@ export default function AdminRequestsPage() {
     try {
       const response = await approveApplication(applicationId);
       alert(response.data.message || "참여 신청이 승인되었습니다.");
-      fetchApplications();
+      loadRequestsData();
     } catch (error) {
       console.error("참여 신청 승인 실패:", error);
       alert("참여 신청 승인 중 오류가 발생했습니다.");
@@ -151,7 +185,7 @@ export default function AdminRequestsPage() {
       });
 
       alert(response.data.message || "참여 신청이 반려되었습니다.");
-      fetchApplications();
+      loadRequestsData();
     } catch (error) {
       console.error("참여 신청 반려 실패:", error);
       alert("참여 신청 반려 중 오류가 발생했습니다.");
@@ -165,7 +199,7 @@ export default function AdminRequestsPage() {
     try {
       const response = await cancelApplication(applicationId);
       alert(response.data.message || "참여 신청이 취소 처리되었습니다.");
-      fetchApplications();
+      loadRequestsData();
     } catch (error) {
       console.error("참여 신청 취소 실패:", error);
       alert("참여 신청 취소 중 오류가 발생했습니다.");
@@ -184,10 +218,7 @@ export default function AdminRequestsPage() {
         <button
           type="button"
           className="admin-refresh-btn"
-          onClick={() => {
-            fetchProjectRequests();
-            fetchApplications();
-          }}
+          onClick={handleRefresh}
         >
           새로고침
         </button>
@@ -267,6 +298,7 @@ export default function AdminRequestsPage() {
                           >
                             승인
                           </button>
+
                           <button
                             type="button"
                             className="admin-action reject"
@@ -276,6 +308,7 @@ export default function AdminRequestsPage() {
                           >
                             반려
                           </button>
+
                           <button
                             type="button"
                             className="admin-action cancel"
@@ -352,6 +385,7 @@ export default function AdminRequestsPage() {
                           >
                             승인
                           </button>
+
                           <button
                             type="button"
                             className="admin-action reject"
@@ -363,6 +397,7 @@ export default function AdminRequestsPage() {
                           >
                             반려
                           </button>
+
                           <button
                             type="button"
                             className="admin-action cancel"
