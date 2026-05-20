@@ -979,4 +979,71 @@
       grid-template-columns: 1fr;
     }
   }
+  .admin-code {
+    display: inline-block;
+    background: var(--paper);
+    color: var(--brown-dk);
+    border-radius: 999px;
+    padding: 5px 9px;
+    font-size: 12px;
+  }
+
+  .admin-stat-value {
+    font-family: var(--font-display);
+    color: var(--terra);
+    font-size: 18px;
+  }
+
+  .admin-stats-filter {
+    display: flex;
+    gap: 8px;
+    align-items: center;
+    flex-wrap: wrap;
+  }
+
+  .admin-stats-filter input,
+  .admin-stats-filter select {
+    border: 1.5px solid var(--border);
+    border-radius: var(--radius-sm);
+    background: var(--bg);
+    padding: 9px 10px;
+    color: var(--fg);
+    outline: none;
+    font-size: 13px;
+  }
+
+  .admin-stats-filter input {
+    width: 130px;
+  }
+
+  .admin-stats-filter input:focus,
+  .admin-stats-filter select:focus {
+    border-color: var(--accent-dk);
+    background: var(--surface);
+  }
+
+  .admin-stats-filter button {
+    background: var(--brown-dk);
+    color: var(--surface);
+    border-radius: var(--radius-sm);
+    padding: 10px 14px;
+    font-family: var(--font-display);
+    font-size: 13px;
+  }
+
+  .admin-stats-filter button:hover {
+    background: var(--terra);
+  }
+
+  @media (max-width: 720px) {
+    .admin-stats-filter {
+      width: 100%;
+    }
+
+    .admin-stats-filter input,
+    .admin-stats-filter select,
+    .admin-stats-filter button {
+      width: 100%;
+    }
+  }
 }
