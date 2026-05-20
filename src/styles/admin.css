@@ -762,4 +762,221 @@
       grid-template-columns: 1fr;
     }
   }
+
+  .admin-sms-layout {
+    display: grid;
+    grid-template-columns: 1fr 420px;
+    gap: 24px;
+    align-items: start;
+  }
+
+  .admin-sms-send-card,
+  .admin-sms-target-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-lg);
+    overflow: hidden;
+  }
+
+  .admin-table-head.inner {
+    padding: 20px 22px;
+  }
+
+  .admin-sms-form {
+    display: grid;
+    gap: 18px;
+    padding: 24px;
+  }
+
+  .admin-inline-field {
+    display: grid;
+    grid-template-columns: 1fr auto;
+    gap: 8px;
+  }
+
+  .admin-inline-field select {
+    border: 1.5px solid var(--border);
+    border-radius: var(--radius-sm);
+    background: var(--bg);
+    padding: 12px 14px;
+    color: var(--fg);
+    outline: none;
+  }
+
+  .admin-inline-field button {
+    background: var(--brown-dk);
+    color: var(--surface);
+    border-radius: var(--radius-sm);
+    padding: 0 14px;
+    font-family: var(--font-display);
+  }
+
+  .admin-inline-field button:hover {
+    background: var(--terra);
+  }
+
+  .sms-message-counter {
+    text-align: right;
+    font-size: 12px;
+    color: var(--muted);
+    margin-top: -10px;
+  }
+
+  .admin-send-btn {
+    background: var(--terra);
+    color: var(--surface);
+    border-radius: var(--radius);
+    padding: 14px;
+    font-family: var(--font-display);
+    font-size: 16px;
+  }
+
+  .admin-send-btn:hover {
+    background: var(--terra-dk);
+  }
+
+  .admin-small-btn {
+    background: var(--paper);
+    color: var(--brown-dk);
+    border-radius: var(--radius-sm);
+    padding: 8px 12px;
+    font-family: var(--font-display);
+    font-size: 13px;
+  }
+
+  .admin-target-list {
+    display: grid;
+    max-height: 460px;
+    overflow-y: auto;
+  }
+
+  .admin-target-item {
+    display: grid;
+    grid-template-columns: auto 1fr auto;
+    gap: 12px;
+    align-items: center;
+    padding: 14px 18px;
+    border-bottom: 1px solid var(--border);
+    cursor: pointer;
+  }
+
+  .admin-target-item:hover {
+    background: rgba(234, 219, 184, 0.25);
+  }
+
+  .admin-target-item input {
+    width: 16px;
+    height: 16px;
+  }
+
+  .admin-target-item strong {
+    display: block;
+    color: var(--brown-dk);
+    font-family: var(--font-display);
+    font-size: 14px;
+  }
+
+  .admin-target-item p {
+    color: var(--muted);
+    font-size: 12px;
+    margin-top: 2px;
+  }
+
+  .admin-target-item > span {
+    color: var(--accent-dk);
+    background: var(--accent-sf);
+    border-radius: 999px;
+    padding: 5px 8px;
+    font-size: 11px;
+    white-space: nowrap;
+  }
+
+  .admin-sms-detail {
+    display: grid;
+    gap: 14px;
+  }
+
+  .admin-sms-detail > div {
+    background: var(--bg);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 16px;
+    display: grid;
+    gap: 6px;
+  }
+
+  .admin-sms-detail span {
+    color: var(--muted);
+    font-size: 12px;
+  }
+
+  .admin-sms-detail strong {
+    color: var(--brown-dk);
+    font-family: var(--font-display);
+    font-size: 16px;
+  }
+
+  .admin-sms-detail p {
+    color: var(--fg);
+    line-height: 1.6;
+    white-space: pre-wrap;
+  }
+
+  .admin-recipient-detail-list {
+    margin-top: 24px;
+    display: grid;
+    gap: 10px;
+  }
+
+  .admin-recipient-detail-list h3 {
+    font-family: var(--font-display);
+    color: var(--brown-dk);
+    font-size: 18px;
+  }
+
+  .admin-recipient-detail-item {
+    display: grid;
+    grid-template-columns: 1fr 1fr auto;
+    gap: 12px;
+    align-items: center;
+    background: var(--bg);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-sm);
+    padding: 12px;
+  }
+
+  .admin-recipient-detail-item span {
+    color: var(--brown-dk);
+    font-family: var(--font-display);
+  }
+
+  .admin-recipient-detail-item strong {
+    color: var(--muted);
+    font-size: 13px;
+  }
+
+  .admin-recipient-detail-item em {
+    color: var(--accent-dk);
+    background: var(--accent-sf);
+    border-radius: 999px;
+    padding: 4px 8px;
+    font-style: normal;
+    font-size: 12px;
+  }
+
+  @media (max-width: 1100px) {
+    .admin-sms-layout {
+      grid-template-columns: 1fr;
+    }
+  }
+
+  @media (max-width: 720px) {
+    .admin-inline-field {
+      grid-template-columns: 1fr;
+    }
+
+    .admin-recipient-detail-item {
+      grid-template-columns: 1fr;
+    }
+  }
 }
