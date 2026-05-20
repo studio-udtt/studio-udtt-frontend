@@ -1,0 +1,76 @@
+.not-found-page {
+  min-height: calc(100vh - 76px);
+  display: grid;
+  place-items: center;
+  padding: 48px 24px;
+  background: var(--bg);
+}
+
+.not-found-card {
+  width: min(560px, 100%);
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  padding: 44px;
+  text-align: center;
+  box-shadow: 0 20px 60px rgba(61, 43, 25, 0.08);
+}
+
+.not-found-card > span {
+  display: inline-block;
+  font-family: var(--font-display);
+  font-size: 64px;
+  color: var(--terra);
+  line-height: 1;
+  margin-bottom: 18px;
+}
+
+.not-found-card h1 {
+  font-family: var(--font-display);
+  font-size: 30px;
+  color: var(--brown-dk);
+  margin-bottom: 10px;
+}
+
+.not-found-card p {
+  color: var(--muted);
+  font-size: 15px;
+  margin-bottom: 28px;
+}
+
+.not-found-actions {
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.admin-not-found-card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  padding: 40px;
+}
+
+.admin-not-found-card span {
+  display: inline-block;
+  font-size: 12px;
+  letter-spacing: 0.14em;
+  color: var(--terra-dk);
+  background: var(--terra-sf);
+  padding: 6px 12px;
+  border-radius: 999px;
+  margin-bottom: 14px;
+}
+
+.admin-not-found-card h1 {
+  font-family: var(--font-display);
+  color: var(--brown-dk);
+  font-size: 28px;
+  margin-bottom: 8px;
+}
+
+.admin-not-found-card p {
+  color: var(--muted);
+  margin-bottom: 24px;
+}

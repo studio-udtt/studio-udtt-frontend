@@ -10,6 +10,7 @@ import "./styles/recruit.css";
 import "./styles/about.css";
 import "./styles/project-detail.css";
 import "./styles/admin.css";
+import "./styles/error.css";
 
 ReactDOM.createRoot(document.getElementById("root")).render(
   <React.StrictMode>
