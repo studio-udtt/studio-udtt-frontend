@@ -11,6 +11,7 @@ import ProjectApplicationPage from "../pages/ProjectApplicationPage";
 
 import AdminLoginPage from "../pages/admin/AdminLoginPage";
 import AdminDashboardPage from "../pages/admin/AdminDashboardPage";
+import AdminRequestsPage from "../pages/admin/AdminRequestsPage";
 
 export default function AppRouter() {
   return (
@@ -31,6 +32,7 @@ export default function AppRouter() {
 
         <Route path="/admin" element={<AdminLayout />}>
           <Route index element={<AdminDashboardPage />} />
+          <Route path="requests" element={<AdminRequestsPage />} />
         </Route>
       </Routes>
     </BrowserRouter>
