@@ -13,6 +13,7 @@ import AdminLoginPage from "../pages/admin/AdminLoginPage";
 import AdminDashboardPage from "../pages/admin/AdminDashboardPage";
 import AdminRequestsPage from "../pages/admin/AdminRequestsPage";
 import AdminProjectsPage from "../pages/admin/AdminProjectsPage";
+import AdminContentsPage from "../pages/admin/AdminContentsPage";
 
 export default function AppRouter() {
   return (
@@ -35,6 +36,7 @@ export default function AppRouter() {
           <Route index element={<AdminDashboardPage />} />
           <Route path="requests" element={<AdminRequestsPage />} />
           <Route path="projects" element={<AdminProjectsPage />} />
+          <Route path="contents" element={<AdminContentsPage />} />
         </Route>
       </Routes>
     </BrowserRouter>
