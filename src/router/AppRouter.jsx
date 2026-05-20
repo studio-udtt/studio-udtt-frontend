@@ -8,10 +8,16 @@ import RecruitPage from "../pages/RecruitPage";
 import AboutPage from "../pages/AboutPage";
 import ProjectDetailPage from "../pages/ProjectDetailPage";
 import ProjectApplicationPage from "../pages/ProjectApplicationPage";
+import NotFoundPage from "../pages/NotFoundPage";
 
 import AdminLoginPage from "../pages/admin/AdminLoginPage";
 import AdminDashboardPage from "../pages/admin/AdminDashboardPage";
 import AdminRequestsPage from "../pages/admin/AdminRequestsPage";
+import AdminProjectsPage from "../pages/admin/AdminProjectsPage";
+import AdminContentsPage from "../pages/admin/AdminContentsPage";
+import AdminSmsPage from "../pages/admin/AdminSmsPage";
+import AdminStatsPage from "../pages/admin/AdminStatsPage";
+import AdminNotFoundPage from "../pages/admin/AdminNotFoundPage";
 
 export default function AppRouter() {
   return (
@@ -33,7 +39,14 @@ export default function AppRouter() {
         <Route path="/admin" element={<AdminLayout />}>
           <Route index element={<AdminDashboardPage />} />
           <Route path="requests" element={<AdminRequestsPage />} />
+          <Route path="projects" element={<AdminProjectsPage />} />
+          <Route path="contents" element={<AdminContentsPage />} />
+          <Route path="sms" element={<AdminSmsPage />} />
+          <Route path="stats" element={<AdminStatsPage />} />
+          <Route path="*" element={<AdminNotFoundPage />} />
         </Route>
+
+        <Route path="*" element={<NotFoundPage />} />
       </Routes>
     </BrowserRouter>
   );
