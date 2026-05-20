@@ -1,0 +1,40 @@
+@font-face {
+  font-family: "BMJUA";
+  src: url("https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_one@1.0/BMJUA.woff")
+    format("woff");
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+
+:root {
+  --bg: #f7f2e8;
+  --surface: #ffffff;
+  --paper: #efe6d2;
+  --fg: #2b1f12;
+  --muted: #8b7355;
+  --border: #e2d5b8;
+  --border-2: #c9b68e;
+  --brown: #6b4f32;
+  --brown-dk: #3d2b19;
+
+  --accent: #c8964a;
+  --accent-dk: #a6772e;
+  --accent-sf: #eadbb8;
+
+  --terra: #b5593f;
+  --terra-dk: #8e3f2a;
+  --terra-sf: #e8c9bb;
+
+  --success: #6b8e4e;
+  --danger: #b5593f;
+
+  --font-display:
+    "BMJUA", -apple-system, BlinkMacSystemFont, system-ui, sans-serif;
+  --font-body:
+    "BMJUA", -apple-system, BlinkMacSystemFont, system-ui, sans-serif;
+
+  --radius: 14px;
+  --radius-lg: 22px;
+  --radius-sm: 8px;
+}
