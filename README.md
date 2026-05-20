@@ -1,12 +1,15 @@
-studio-udtt-frontend
+# studio-udtt-frontend
 
-Studio & Lab 우당탕탕 공식 웹사이트의 프론트엔드
+> 프로젝트 우당탕탕 공식 웹사이트의 프론트엔드 서버
 
 지도 기반 프로젝트 현황 확인, 프로젝트 의뢰/참여 신청, 회사 소개, 관리자 페이지를 제공하는 웹 애플리케이션입니다.
 
-🛠 Tech Stack
+---
+
+## 🛠 기술 스택
+
 |분류|기술|선택 이유|
-|-|-|
+|---|---|---|
 |Framework|React 19|컴포넌트 기반 UI 구성|
 |Build Tool|Vite|빠른 개발 서버 및 번들링|
 |Routing|React Router v7|페이지 간 이동 및 접근 제어|
@@ -46,6 +49,3 @@ VITE_NAVER_MAP_CLIENT_ID=your_naver_map_client_id
 
 관리자 페이지(/admin)는 JWT 인증 후 접근 가능합니다.
 
-
-🔗 관련 레포지토리
-Backend
