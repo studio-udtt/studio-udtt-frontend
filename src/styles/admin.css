@@ -644,4 +644,122 @@
       padding: 24px;
     }
   }
+
+  .admin-head-actions {
+    display: flex;
+    gap: 10px;
+    align-items: center;
+    flex-wrap: wrap;
+  }
+
+  .admin-create-btn {
+    background: var(--terra);
+    color: var(--surface);
+    border-radius: var(--radius-sm);
+    padding: 11px 16px;
+    font-family: var(--font-display);
+    font-size: 14px;
+  }
+
+  .admin-create-btn:hover {
+    background: var(--terra-dk);
+  }
+
+  .admin-crawl-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-lg);
+    padding: 24px;
+    display: grid;
+    gap: 18px;
+  }
+
+  .admin-crawl-card h2 {
+    font-family: var(--font-display);
+    color: var(--brown-dk);
+    font-size: 20px;
+    margin-bottom: 6px;
+  }
+
+  .admin-crawl-card p {
+    color: var(--muted);
+    font-size: 14px;
+  }
+
+  .admin-crawl-form {
+    display: grid;
+    grid-template-columns: 1fr 1fr 160px auto;
+    gap: 10px;
+  }
+
+  .admin-crawl-form input,
+  .admin-crawl-form select {
+    border: 1.5px solid var(--border);
+    border-radius: var(--radius-sm);
+    background: var(--bg);
+    padding: 11px 12px;
+    color: var(--fg);
+    outline: none;
+    font-size: 14px;
+  }
+
+  .admin-crawl-form input:focus,
+  .admin-crawl-form select:focus {
+    border-color: var(--accent-dk);
+    background: var(--surface);
+  }
+
+  .admin-crawl-form button {
+    background: var(--brown-dk);
+    color: var(--surface);
+    border-radius: var(--radius-sm);
+    padding: 11px 16px;
+    font-family: var(--font-display);
+    font-size: 14px;
+    white-space: nowrap;
+  }
+
+  .admin-crawl-form button:hover {
+    background: var(--terra);
+  }
+
+  .admin-source-link {
+    color: var(--accent-dk);
+    font-family: var(--font-display);
+  }
+
+  .admin-source-link:hover {
+    color: var(--terra);
+  }
+
+  .admin-field select {
+    border: 1.5px solid var(--border);
+    border-radius: var(--radius-sm);
+    background: var(--bg);
+    padding: 13px 14px;
+    font-size: 15px;
+    color: var(--fg);
+    outline: none;
+  }
+
+  .admin-field select:focus {
+    border-color: var(--accent-dk);
+    background: var(--surface);
+  }
+
+  @media (max-width: 1100px) {
+    .admin-crawl-form {
+      grid-template-columns: 1fr 1fr;
+    }
+
+    .admin-crawl-form button {
+      grid-column: 1 / -1;
+    }
+  }
+
+  @media (max-width: 720px) {
+    .admin-crawl-form {
+      grid-template-columns: 1fr;
+    }
+  }
 }
