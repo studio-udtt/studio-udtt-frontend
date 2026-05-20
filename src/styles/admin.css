@@ -461,4 +461,187 @@
     color: var(--muted);
     text-align: center;
   }
+
+  .admin-project-title {
+    display: block;
+    color: var(--brown-dk);
+    font-family: var(--font-display);
+    font-size: 15px;
+    margin-bottom: 4px;
+  }
+
+  .admin-project-summary {
+    color: var(--muted);
+    font-size: 12px;
+    line-height: 1.4;
+    max-width: 320px;
+  }
+
+  .admin-status-select {
+    border: 1px solid var(--border);
+    background: var(--bg);
+    color: var(--brown-dk);
+    border-radius: var(--radius-sm);
+    padding: 8px 10px;
+    font-family: var(--font-display);
+    font-size: 12px;
+    outline: none;
+  }
+
+  .admin-status-select:focus {
+    border-color: var(--accent-dk);
+    background: var(--surface);
+  }
+
+  .admin-visible {
+    display: inline-flex;
+    align-items: center;
+    padding: 5px 9px;
+    border-radius: 999px;
+    font-family: var(--font-display);
+    font-size: 12px;
+    white-space: nowrap;
+  }
+
+  .admin-visible.on {
+    background: rgba(107, 142, 78, 0.18);
+    color: var(--success);
+  }
+
+  .admin-visible.off {
+    background: var(--paper);
+    color: var(--muted);
+  }
+
+  .admin-modal-backdrop {
+    position: fixed;
+    inset: 0;
+    background: rgba(43, 31, 18, 0.35);
+    backdrop-filter: blur(6px);
+    z-index: 100;
+    display: grid;
+    place-items: center;
+    padding: 24px;
+  }
+
+  .admin-modal {
+    width: min(720px, 100%);
+    max-height: calc(100vh - 48px);
+    overflow-y: auto;
+    background: var(--surface);
+    border-radius: var(--radius-lg);
+    border: 1px solid var(--border);
+    box-shadow: 0 20px 80px rgba(43, 31, 18, 0.18);
+    padding: 30px;
+  }
+
+  .admin-modal-head {
+    display: flex;
+    justify-content: space-between;
+    gap: 24px;
+    align-items: flex-start;
+    margin-bottom: 24px;
+  }
+
+  .admin-modal-head h2 {
+    font-family: var(--font-display);
+    color: var(--brown-dk);
+    font-size: 26px;
+  }
+
+  .admin-modal-close {
+    width: 36px;
+    height: 36px;
+    border-radius: 999px;
+    background: var(--paper);
+    color: var(--brown-dk);
+    font-size: 24px;
+    line-height: 1;
+  }
+
+  .admin-modal-close:hover {
+    background: var(--terra-sf);
+    color: var(--terra-dk);
+  }
+
+  .admin-edit-form {
+    display: grid;
+    gap: 18px;
+  }
+
+  .admin-field textarea {
+    border: 1.5px solid var(--border);
+    border-radius: var(--radius-sm);
+    background: var(--bg);
+    padding: 13px 14px;
+    font-size: 15px;
+    color: var(--fg);
+    outline: none;
+    min-height: 120px;
+    resize: vertical;
+  }
+
+  .admin-field textarea:focus {
+    border-color: var(--accent-dk);
+    background: var(--surface);
+  }
+
+  .admin-form-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 18px;
+  }
+
+  .admin-check {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    color: var(--muted);
+    font-size: 14px;
+    padding-top: 28px;
+  }
+
+  .admin-check input {
+    width: 16px;
+    height: 16px;
+  }
+
+  .admin-modal-actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: 10px;
+    margin-top: 8px;
+  }
+
+  .admin-cancel-btn,
+  .admin-save-btn {
+    border-radius: var(--radius-sm);
+    padding: 12px 18px;
+    font-family: var(--font-display);
+    font-size: 14px;
+  }
+
+  .admin-cancel-btn {
+    background: var(--paper);
+    color: var(--muted);
+  }
+
+  .admin-save-btn {
+    background: var(--brown-dk);
+    color: var(--surface);
+  }
+
+  .admin-save-btn:hover {
+    background: var(--terra);
+  }
+
+  @media (max-width: 720px) {
+    .admin-form-grid {
+      grid-template-columns: 1fr;
+    }
+
+    .admin-modal {
+      padding: 24px;
+    }
+  }
 }
