@@ -31,13 +31,6 @@ src/
   └── assets/               # 이미지, 폰트 등 정적 파일
 ```
 
-⚙️ 환경 설정
-프로젝트 루트에 .env 파일을 생성하세요.
-envVITE_API_BASE_URL=http://localhost:8080
-VITE_NAVER_MAP_CLIENT_ID=your_naver_map_client_id
-
-주의: .env 파일은 .gitignore에 포함되어 있으므로 직접 생성해야 합니다.
-
 🔑 주요 화면
 
 메인 페이지 — Naver Map 기반 프로젝트 현황 지도 (진행중 / 완료 구분 표시)
@@ -47,5 +40,5 @@ VITE_NAVER_MAP_CLIENT_ID=your_naver_map_client_id
 관리자 페이지 — 의뢰/참여 신청 승인·반려, 문자 발송, 콘텐츠 관리, 통계
 
 
-관리자 페이지(/admin)는 JWT 인증 후 접근 가능합니다.
+관리자 페이지(/admin)는 관리자 전용 페이지로, 로그인 후 접근 가능합니다.
 
