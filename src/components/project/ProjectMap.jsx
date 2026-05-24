@@ -1,7 +1,28 @@
+import { useState } from "react";
 import ProjectInfoPanel from "./ProjectInfoPanel";
 
+const positions = [
+  ["49%", "38%"],
+  ["52%", "41%"],
+  ["56%", "35%"],
+  ["44%", "44%"],
+  ["58%", "60%"],
+  ["38%", "70%"],
+  ["42%", "50%"],
+  ["50%", "65%"],
+];
+
 export default function ProjectMap({ projects = [] }) {
-  const selectedProject = projects[0];
+  const [selectedIndex, setSelectedIndex] = useState(0);
+
+  const safeSelectedIndex =
+    projects.length > 0 ? Math.min(selectedIndex, projects.length - 1) : 0;
+
+  const selectedProject = projects[safeSelectedIndex];
+
+  const [labelLeft, labelTop] = positions[
+    safeSelectedIndex % positions.length
+  ] || ["49%", "38%"];
 
   return (
     <div className="map-layout">
@@ -60,33 +81,26 @@ export default function ProjectMap({ projects = [] }) {
         </svg>
 
         {projects.map((project, index) => {
-          const positions = [
-            ["49%", "38%"],
-            ["52%", "41%"],
-            ["56%", "35%"],
-            ["44%", "44%"],
-            ["58%", "60%"],
-            ["38%", "70%"],
-            ["42%", "50%"],
-            ["50%", "65%"],
-          ];
-
           const [left, top] = positions[index % positions.length];
+
+          const isSelected = safeSelectedIndex === index;
 
           return (
             <button
               key={project.project_id}
+              type="button"
               className={`pin ${
                 project.status === "COMPLETED" ? "done" : "progress"
-              } ${index === 0 ? "selected" : ""}`}
+              } ${isSelected ? "selected" : ""}`}
               style={{ left, top }}
               title={project.title}
+              onClick={() => setSelectedIndex(index)}
             />
           );
         })}
 
         {selectedProject && (
-          <div className="pin-label" style={{ left: "49%", top: "38%" }}>
+          <div className="pin-label" style={{ left: labelLeft, top: labelTop }}>
             {selectedProject.region_sigungu}
           </div>
         )}

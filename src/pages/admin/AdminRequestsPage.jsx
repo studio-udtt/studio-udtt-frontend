@@ -12,6 +12,26 @@ import {
   rejectApplication,
 } from "../../api/admin/adminApplicationApi";
 
+const extractPageContent = (responseData) => {
+  if (Array.isArray(responseData)) {
+    return responseData;
+  }
+
+  if (Array.isArray(responseData?.content)) {
+    return responseData.content;
+  }
+
+  if (Array.isArray(responseData?.data)) {
+    return responseData.data;
+  }
+
+  if (Array.isArray(responseData?.data?.content)) {
+    return responseData.data.content;
+  }
+
+  return [];
+};
+
 export default function AdminRequestsPage() {
   const [activeTab, setActiveTab] = useState("projectRequests");
   const [projectRequests, setProjectRequests] = useState([]);
@@ -35,8 +55,11 @@ export default function AdminRequestsPage() {
         }),
       ]);
 
-      setProjectRequests(projectRequestResponse.data);
-      setApplications(applicationResponse.data);
+      console.log("의뢰 신청 응답:", projectRequestResponse.data);
+      console.log("참여 신청 응답:", applicationResponse.data);
+
+      setProjectRequests(extractPageContent(projectRequestResponse.data));
+      setApplications(extractPageContent(applicationResponse.data));
     } catch (error) {
       console.error("신청 관리 목록 조회 실패:", error);
       setProjectRequests([]);
@@ -66,9 +89,12 @@ export default function AdminRequestsPage() {
           ],
         );
 
+        console.log("초기 의뢰 신청 응답:", projectRequestResponse.data);
+        console.log("초기 참여 신청 응답:", applicationResponse.data);
+
         if (!ignore) {
-          setProjectRequests(projectRequestResponse.data);
-          setApplications(applicationResponse.data);
+          setProjectRequests(extractPageContent(projectRequestResponse.data));
+          setApplications(extractPageContent(applicationResponse.data));
         }
       } catch (error) {
         if (!ignore) {
@@ -89,11 +115,12 @@ export default function AdminRequestsPage() {
       ignore = true;
     };
   }, []);
+
   const handleRefresh = () => {
     loadRequestsData();
   };
 
-  const handleApproveProjectRequest = async (requestId) => {
+  const handleApproveProjectRequest = async (request) => {
     const title = window.prompt("프로젝트 제목을 입력하세요.");
     if (!title) return;
 
@@ -106,6 +133,29 @@ export default function AdminRequestsPage() {
     );
     const maxParticipants = Number(maxParticipantsInput || 20);
 
+    if (Number.isNaN(maxParticipants) || maxParticipants <= 0) {
+      alert("최대 참여 인원은 1명 이상의 숫자로 입력해야 합니다.");
+      return;
+    }
+
+    const latitudeInput = window.prompt(
+      `주소: ${request.space_address || "주소 없음"}\n위도를 입력하세요.`,
+    );
+    if (!latitudeInput) return;
+
+    const longitudeInput = window.prompt(
+      `주소: ${request.space_address || "주소 없음"}\n경도를 입력하세요.`,
+    );
+    if (!longitudeInput) return;
+
+    const latitude = Number(latitudeInput);
+    const longitude = Number(longitudeInput);
+
+    if (Number.isNaN(latitude) || Number.isNaN(longitude)) {
+      alert("위도와 경도는 숫자로 입력해야 합니다.");
+      return;
+    }
+
     const payload = {
       title,
       summary,
@@ -115,13 +165,13 @@ export default function AdminRequestsPage() {
       project_start_date: "2026-06-15",
       project_end_date: "2026-07-05",
       max_participants: maxParticipants,
-      latitude: 37.5665,
-      longitude: 126.978,
+      latitude,
+      longitude,
       is_visible: true,
     };
 
     try {
-      const response = await approveProjectRequest(requestId, payload);
+      const response = await approveProjectRequest(request.request_id, payload);
       alert(response.data.message || "의뢰가 승인되었습니다.");
       loadRequestsData();
     } catch (error) {
@@ -206,6 +256,12 @@ export default function AdminRequestsPage() {
     }
   };
 
+  const safeProjectRequests = Array.isArray(projectRequests)
+    ? projectRequests
+    : [];
+
+  const safeApplications = Array.isArray(applications) ? applications : [];
+
   return (
     <section className="admin-page">
       <div className="admin-page-head">
@@ -250,10 +306,10 @@ export default function AdminRequestsPage() {
         <section className="admin-table-card">
           <div className="admin-table-head">
             <h2>의뢰 신청 목록</h2>
-            <span>{projectRequests.length}건</span>
+            <span>{safeProjectRequests.length}건</span>
           </div>
 
-          {projectRequests.length === 0 ? (
+          {safeProjectRequests.length === 0 ? (
             <div className="admin-empty">등록된 의뢰 신청이 없습니다.</div>
           ) : (
             <div className="admin-table-wrap">
@@ -272,7 +328,7 @@ export default function AdminRequestsPage() {
                 </thead>
 
                 <tbody>
-                  {projectRequests.map((request) => (
+                  {safeProjectRequests.map((request) => (
                     <tr key={request.request_id}>
                       <td>{request.request_id}</td>
                       <td>{request.requester_name}</td>
@@ -292,9 +348,7 @@ export default function AdminRequestsPage() {
                           <button
                             type="button"
                             className="admin-action approve"
-                            onClick={() =>
-                              handleApproveProjectRequest(request.request_id)
-                            }
+                            onClick={() => handleApproveProjectRequest(request)}
                           >
                             승인
                           </button>
@@ -333,10 +387,10 @@ export default function AdminRequestsPage() {
         <section className="admin-table-card">
           <div className="admin-table-head">
             <h2>참여 신청 목록</h2>
-            <span>{applications.length}건</span>
+            <span>{safeApplications.length}건</span>
           </div>
 
-          {applications.length === 0 ? (
+          {safeApplications.length === 0 ? (
             <div className="admin-empty">등록된 참여 신청이 없습니다.</div>
           ) : (
             <div className="admin-table-wrap">
@@ -355,7 +409,7 @@ export default function AdminRequestsPage() {
                 </thead>
 
                 <tbody>
-                  {applications.map((application) => (
+                  {safeApplications.map((application) => (
                     <tr key={application.application_id}>
                       <td>{application.application_id}</td>
                       <td className="admin-td-wide">
