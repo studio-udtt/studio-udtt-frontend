@@ -93,7 +93,7 @@ export default function AdminDashboardPage() {
     <section className="admin-page">
       <div className="admin-page-head">
         <div>
-          <span className="admin-eyebrow">DASHBOARD</span>
+          <span className="admin-eyebrow">team 우당탕탕</span>
           <h1>DASHBOARD</h1>
           <p>데이터를 한눈에 관리하고 확인합니다.</p>
         </div>

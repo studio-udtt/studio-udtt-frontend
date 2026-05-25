@@ -1,8 +1,39 @@
+import { useEffect, useState } from "react";
 import { NavLink, useNavigate } from "react-router-dom";
-import { adminLogout } from "../../api/admin/adminAuthApi";
+import { adminLogout, getCurrentAdmin } from "../../api/admin/adminAuthApi";
 
 export default function AdminSidebar() {
   const navigate = useNavigate();
+  const [adminName, setAdminName] = useState("");
+
+  useEffect(() => {
+    const fetchCurrentAdmin = async () => {
+      try {
+        const response = await getCurrentAdmin();
+
+        setAdminName(response.data.name || response.data.login_id || "관리자");
+
+        localStorage.setItem("admin", JSON.stringify(response.data));
+      } catch (error) {
+        console.error("현재 로그인 관리자 조회 실패:", error);
+
+        const savedAdmin = localStorage.getItem("admin");
+
+        if (savedAdmin) {
+          try {
+            const parsedAdmin = JSON.parse(savedAdmin);
+            setAdminName(parsedAdmin.name || parsedAdmin.login_id || "관리자");
+          } catch {
+            setAdminName("관리자");
+          }
+        } else {
+          setAdminName("관리자");
+        }
+      }
+    };
+
+    fetchCurrentAdmin();
+  }, []);
 
   const handleLogout = async () => {
     try {
@@ -19,8 +50,11 @@ export default function AdminSidebar() {
   return (
     <aside className="admin-sidebar">
       <div className="admin-brand">
-        <span>studio&amp;lab</span>
-        <strong>우당탕탕 관리자</strong>
+        <span>현재 로그인 관리자</span>
+        <strong>
+          {adminName}
+          <small> 님</small>
+        </strong>
       </div>
 
       <nav className="admin-nav">

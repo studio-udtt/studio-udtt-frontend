@@ -134,6 +134,13 @@
   color: var(--surface);
 }
 
+.admin-brand strong small {
+  font-size: 13px;
+  font-weight: 400;
+  color: rgba(234, 219, 184, 0.7);
+  margin-left: 2px;
+}
+
 .admin-nav {
   display: grid;
   gap: 6px;
