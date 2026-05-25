@@ -1,41 +1,94 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import ProjectInfoPanel from "./ProjectInfoPanel";
 
-const positions = [
-  ["49%", "38%"],
-  ["52%", "41%"],
-  ["56%", "35%"],
-  ["44%", "44%"],
-  ["58%", "60%"],
-  ["38%", "70%"],
-  ["42%", "50%"],
-  ["50%", "65%"],
-];
+function getPinPosition(project) {
+  const latitude = Number(project.latitude);
+  const longitude = Number(project.longitude);
+
+  if (!Number.isFinite(latitude) || !Number.isFinite(longitude)) {
+    return {
+      left: "50%",
+      top: "50%",
+    };
+  }
+
+  /**
+   * 대략적인 대한민국 지도 범위
+   * longitude: 서쪽 124.5 ~ 동쪽 131.0
+   * latitude: 남쪽 33.0 ~ 북쪽 38.8
+   */
+  const minLng = 124.5;
+  const maxLng = 131.0;
+  const minLat = 33.0;
+  const maxLat = 38.8;
+
+  const x = ((longitude - minLng) / (maxLng - minLng)) * 100;
+  const y = ((maxLat - latitude) / (maxLat - minLat)) * 100;
+
+  return {
+    left: `${Math.min(Math.max(x, 0), 100)}%`,
+    top: `${Math.min(Math.max(y, 0), 100)}%`,
+  };
+}
 
 export default function ProjectMap({ projects = [] }) {
   const [selectedIndex, setSelectedIndex] = useState(0);
+  const [filter, setFilter] = useState("IN_PROGRESS");
+
+  const filteredProjects = projects.filter((project) => {
+    if (filter === "ALL") return true;
+    if (filter === "COMPLETED") return project.status === "COMPLETED";
+
+    return project.status !== "COMPLETED";
+  });
+
+  useEffect(() => {
+    setSelectedIndex(0);
+  }, [filter]);
 
   const safeSelectedIndex =
-    projects.length > 0 ? Math.min(selectedIndex, projects.length - 1) : 0;
+    filteredProjects.length > 0
+      ? Math.min(selectedIndex, filteredProjects.length - 1)
+      : 0;
 
-  const selectedProject = projects[safeSelectedIndex];
+  const selectedProject = filteredProjects[safeSelectedIndex];
 
-  const [labelLeft, labelTop] = positions[
-    safeSelectedIndex % positions.length
-  ] || ["49%", "38%"];
+  const selectedPosition = selectedProject
+    ? getPinPosition(selectedProject)
+    : { left: "50%", top: "50%" };
 
   return (
     <div className="map-layout">
       <div className="map-area">
         <div className="map-toolbar">
-          <button className="on">진행중</button>
-          <button className="on complete">완료</button>
-          <button>전체</button>
+          <button
+            type="button"
+            className={filter === "IN_PROGRESS" ? "on" : ""}
+            onClick={() => setFilter("IN_PROGRESS")}
+          >
+            진행중
+          </button>
+
+          <button
+            type="button"
+            className={filter === "COMPLETED" ? "on complete" : "complete"}
+            onClick={() => setFilter("COMPLETED")}
+          >
+            완료
+          </button>
+
+          <button
+            type="button"
+            className={filter === "ALL" ? "on" : ""}
+            onClick={() => setFilter("ALL")}
+          >
+            전체
+          </button>
         </div>
 
         <div className="map-counter">
           <div className="n">
-            {projects.length}
+            {filteredProjects.length}
             <span>곳</span>
           </div>
           <div className="l">PROJECTS NATIONWIDE</div>
@@ -53,6 +106,7 @@ export default function ProjectMap({ projects = [] }) {
             strokeWidth="2"
             opacity="0.5"
           />
+
           <ellipse
             cx="245"
             cy="555"
@@ -63,6 +117,7 @@ export default function ProjectMap({ projects = [] }) {
             strokeWidth="2"
             opacity="0.5"
           />
+
           <text x="295" y="220" fontSize="13" fill="#8B7355">
             서울
           </text>
@@ -80,9 +135,8 @@ export default function ProjectMap({ projects = [] }) {
           </text>
         </svg>
 
-        {projects.map((project, index) => {
-          const [left, top] = positions[index % positions.length];
-
+        {filteredProjects.map((project, index) => {
+          const { left, top } = getPinPosition(project);
           const isSelected = safeSelectedIndex === index;
 
           return (
@@ -100,7 +154,13 @@ export default function ProjectMap({ projects = [] }) {
         })}
 
         {selectedProject && (
-          <div className="pin-label" style={{ left: labelLeft, top: labelTop }}>
+          <div
+            className="pin-label"
+            style={{
+              left: selectedPosition.left,
+              top: selectedPosition.top,
+            }}
+          >
             {selectedProject.region_sigungu}
           </div>
         )}
