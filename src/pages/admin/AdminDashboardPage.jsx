@@ -130,7 +130,27 @@ export default function AdminDashboardPage() {
             </div>
 
             {siteStats.length === 0 ? (
-              <div className="admin-empty">등록된 누적 데이터가 없습니다.</div>
+              <div className="admin-dashboard-chart empty-chart">
+                <div className="admin-dashboard-chart-head">
+                  <h3>누적 데이터 비교</h3>
+                  <span>값 기준</span>
+                </div>
+
+                <div className="dashboard-empty-graph">
+                  <div className="dashboard-empty-bars">
+                    <span />
+                    <span />
+                    <span />
+                    <span />
+                  </div>
+
+                  <strong>등록된 누적 데이터가 없습니다.</strong>
+                  <p>
+                    통계 관리에서 누적 데이터를 추가하면 이곳에 그래프로
+                    표시됩니다.
+                  </p>
+                </div>
+              </div>
             ) : (
               <>
                 <div className="admin-stat-grid">
