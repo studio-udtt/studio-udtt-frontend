@@ -95,10 +95,10 @@ export default function AdminSidebar() {
         </NavLink>
 
         <NavLink
-          to="/admin/stats"
+          to="/admin/survey"
           className={({ isActive }) => (isActive ? "active" : "")}
         >
-          통계 관리
+          설문 관리
         </NavLink>
       </nav>
 
