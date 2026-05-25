@@ -29,6 +29,56 @@ const initialCrawlForm = {
   content_type: "NEWS",
 };
 
+const normalizeList = (data) => {
+  if (Array.isArray(data)) return data;
+  if (Array.isArray(data?.content)) return data.content;
+  if (Array.isArray(data?.contents)) return data.contents;
+  if (Array.isArray(data?.data)) return data.data;
+  if (Array.isArray(data?.data?.content)) return data.data.content;
+  return [];
+};
+
+const filterVisibleContents = (list) => {
+  return list.filter((content) => {
+    if (content.deleted === true) return false;
+    if (content.is_deleted === true) return false;
+    if (content.deleted_at) return false;
+    if (content.status === "DELETED") return false;
+
+    return true;
+  });
+};
+const sortContents = (list) => {
+  return [...list].sort((a, b) => {
+    const aTime = new Date(a.published_at || a.created_at || 0).getTime();
+    const bTime = new Date(b.published_at || b.created_at || 0).getTime();
+
+    if (!Number.isNaN(aTime) && !Number.isNaN(bTime) && aTime !== bTime) {
+      return bTime - aTime;
+    }
+
+    return (b.content_id || 0) - (a.content_id || 0);
+  });
+};
+
+const formatDateTime = (value) => {
+  if (!value) return "-";
+
+  const date = new Date(value);
+
+  if (Number.isNaN(date.getTime())) {
+    return value;
+  }
+
+  return date.toLocaleString("ko-KR", {
+    year: "numeric",
+    month: "2-digit",
+    day: "2-digit",
+    hour: "2-digit",
+    minute: "2-digit",
+  });
+};
+
 export default function AdminContentsPage() {
   const [contents, setContents] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
@@ -39,13 +89,6 @@ export default function AdminContentsPage() {
 
   const [crawlForm, setCrawlForm] = useState(initialCrawlForm);
   const [isCrawling, setIsCrawling] = useState(false);
-
-  const normalizeList = (data) => {
-    if (Array.isArray(data)) return data;
-    if (Array.isArray(data?.content)) return data.content;
-    if (Array.isArray(data?.contents)) return data.contents;
-    return [];
-  };
 
   const loadContents = async ({ showLoading = true } = {}) => {
     try {
@@ -58,7 +101,9 @@ export default function AdminContentsPage() {
         size: 50,
       });
 
-      setContents(normalizeList(response.data));
+      setContents(
+        sortContents(filterVisibleContents(normalizeList(response.data))),
+      );
     } catch (error) {
       console.error("관리자 콘텐츠 목록 조회 실패:", error);
       setContents([]);
@@ -80,7 +125,9 @@ export default function AdminContentsPage() {
         });
 
         if (!ignore) {
-          setContents(normalizeList(response.data));
+          setContents(
+            sortContents(filterVisibleContents(normalizeList(response.data))),
+          );
         }
       } catch (error) {
         if (!ignore) {
@@ -150,7 +197,7 @@ export default function AdminContentsPage() {
   const handleSubmitContent = async (event) => {
     event.preventDefault();
 
-    if (!form.title || !form.summary) {
+    if (!form.title.trim() || !form.summary.trim()) {
       alert("제목과 요약은 필수입니다.");
       return;
     }
@@ -200,7 +247,13 @@ export default function AdminContentsPage() {
 
     try {
       const response = await deleteAdminContent(contentId);
+
       alert(response.data.message || "콘텐츠가 삭제되었습니다.");
+
+      setContents((prev) =>
+        prev.filter((content) => content.content_id !== contentId),
+      );
+
       loadContents({ showLoading: false });
     } catch (error) {
       console.error("콘텐츠 삭제 실패:", error);
@@ -211,7 +264,7 @@ export default function AdminContentsPage() {
   const handleCrawlContents = async (event) => {
     event.preventDefault();
 
-    if (!crawlForm.source_name) {
+    if (!crawlForm.source_name.trim()) {
       alert("수집 키워드 또는 출처명을 입력해 주세요.");
       return;
     }
@@ -235,7 +288,7 @@ export default function AdminContentsPage() {
     <section className="admin-page">
       <div className="admin-page-head">
         <div>
-          <span className="admin-eyebrow">CONTENTS</span>
+          <span className="admin-eyebrow">team 우당탕탕</span>
           <h1>콘텐츠 관리</h1>
           <p>게시 콘텐츠를 등록, 수정, 삭제하고 자동 수집을 실행합니다.</p>
         </div>
@@ -299,7 +352,9 @@ export default function AdminContentsPage() {
       </section>
 
       {isLoading ? (
-        <div className="admin-empty">콘텐츠 목록을 불러오는 중입니다.</div>
+        <div className="admin-empty admin-table-empty">
+          콘텐츠 목록을 불러오는 중입니다.
+        </div>
       ) : (
         <section className="admin-table-card">
           <div className="admin-table-head">
@@ -308,13 +363,14 @@ export default function AdminContentsPage() {
           </div>
 
           {contents.length === 0 ? (
-            <div className="admin-empty">등록된 콘텐츠가 없습니다.</div>
+            <div className="admin-empty admin-table-empty">
+              등록된 콘텐츠가 없습니다.
+            </div>
           ) : (
             <div className="admin-table-wrap">
               <table className="admin-table">
                 <thead>
                   <tr>
-                    <th>ID</th>
                     <th>콘텐츠</th>
                     <th>유형</th>
                     <th>출처</th>
@@ -327,18 +383,20 @@ export default function AdminContentsPage() {
                 <tbody>
                   {contents.map((content) => (
                     <tr key={content.content_id}>
-                      <td>{content.content_id}</td>
-
                       <td className="admin-td-wide">
                         <strong className="admin-project-title">
-                          {content.title}
+                          {content.title || "-"}
                         </strong>
                         <p className="admin-project-summary">
-                          {content.summary}
+                          {content.summary || "요약 없음"}
                         </p>
                       </td>
 
-                      <td>{content.content_type || "-"}</td>
+                      <td>
+                        <span className="admin-content-type">
+                          {content.content_type || "-"}
+                        </span>
+                      </td>
 
                       <td>
                         {content.source_url ? (
@@ -377,7 +435,7 @@ export default function AdminContentsPage() {
                         </select>
                       </td>
 
-                      <td>{content.published_at || "-"}</td>
+                      <td>{formatDateTime(content.published_at)}</td>
 
                       <td>
                         <div className="admin-action-group">
