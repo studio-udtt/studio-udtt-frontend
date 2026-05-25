@@ -540,7 +540,7 @@ export default function AdminSmsPage() {
     <section className="admin-page">
       <div className="admin-page-head">
         <div>
-          <span className="admin-eyebrow">SMS</span>
+          <span className="admin-eyebrow">team 우당탕탕</span>
           <h1>문자 발송</h1>
           <p>
             프로젝트를 선택한 뒤 의뢰자 또는 참여 신청자에게 문자를 발송합니다.
