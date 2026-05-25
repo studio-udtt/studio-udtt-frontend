@@ -54,7 +54,7 @@ export default function ProjectInfoPanel({ project }) {
         </div>
       </div>
 
-      <Link to="/recruit" className="info-cta">
+      <Link to={`/projects/${project.project_id}/apply`} className="info-cta">
         이 프로젝트 참여 신청 →
       </Link>
     </aside>

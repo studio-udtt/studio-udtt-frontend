@@ -92,7 +92,7 @@ export default function ProjectApplicationPage() {
             )}
 
             <Link to={`/projects/${projectId}`} className="apply-back">
-              ← 프로젝트 상세로 돌아가기
+              ← 프로젝트 상세보기
             </Link>
           </section>
 
