@@ -13,22 +13,11 @@ import {
 } from "../../api/admin/adminApplicationApi";
 
 const extractPageContent = (responseData) => {
-  if (Array.isArray(responseData)) {
-    return responseData;
-  }
-
-  if (Array.isArray(responseData?.content)) {
-    return responseData.content;
-  }
-
-  if (Array.isArray(responseData?.data)) {
-    return responseData.data;
-  }
-
-  if (Array.isArray(responseData?.data?.content)) {
+  if (Array.isArray(responseData)) return responseData;
+  if (Array.isArray(responseData?.content)) return responseData.content;
+  if (Array.isArray(responseData?.data)) return responseData.data;
+  if (Array.isArray(responseData?.data?.content))
     return responseData.data.content;
-  }
-
   return [];
 };
 
@@ -45,6 +34,54 @@ const STATUS_LABELS = {
   APPROVED: "승인",
   REJECTED: "반려",
   CANCELED: "취소",
+};
+
+const ACTION_MODAL_META = {
+  approveProject: {
+    eyebrow: "APPROVE REQUEST",
+    title: "프로젝트 의뢰 승인",
+    description: "의뢰 신청을 승인하고 프로젝트 생성 정보를 입력합니다.",
+    submitText: "승인 처리",
+  },
+  rejectProject: {
+    eyebrow: "REJECT REQUEST",
+    title: "프로젝트 의뢰 반려",
+    description: "의뢰 신청을 반려할 사유를 입력합니다.",
+    submitText: "반려 처리",
+  },
+  cancelProject: {
+    eyebrow: "CANCEL REQUEST",
+    title: "프로젝트 의뢰 취소",
+    description: "의뢰 신청을 취소 처리합니다.",
+    submitText: "취소 처리",
+  },
+  approveApplication: {
+    eyebrow: "APPROVE APPLICATION",
+    title: "프로젝트 참여 신청 승인",
+    description: "참여 신청을 승인 처리합니다.",
+    submitText: "승인 처리",
+  },
+  rejectApplication: {
+    eyebrow: "REJECT APPLICATION",
+    title: "프로젝트 참여 신청 반려",
+    description: "참여 신청을 반려할 사유를 입력합니다.",
+    submitText: "반려 처리",
+  },
+  cancelApplication: {
+    eyebrow: "CANCEL APPLICATION",
+    title: "프로젝트 참여 신청 취소",
+    description: "참여 신청을 취소 처리합니다.",
+    submitText: "취소 처리",
+  },
+};
+
+const initialActionForm = {
+  title: "",
+  summary: "",
+  max_participants: "20",
+  latitude: "",
+  longitude: "",
+  reject_reason: "",
 };
 
 const formatDateTime = (value) => {
@@ -71,6 +108,10 @@ export default function AdminRequestsPage() {
   const [projectRequests, setProjectRequests] = useState([]);
   const [applications, setApplications] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
+
+  const [actionModal, setActionModal] = useState(null);
+  const [actionForm, setActionForm] = useState(initialActionForm);
+  const [isProcessing, setIsProcessing] = useState(false);
 
   const loadRequestsData = async ({ showLoading = true } = {}) => {
     try {
@@ -159,139 +200,145 @@ export default function AdminRequestsPage() {
     setStatusFilter("ALL");
   };
 
-  const handleApproveProjectRequest = async (request) => {
-    const title = window.prompt("프로젝트 제목을 입력하세요.");
-    if (!title) return;
+  const openActionModal = (type, target) => {
+    setActionModal({ type, target });
 
-    const summary = window.prompt("프로젝트 요약을 입력하세요.");
-    if (!summary) return;
-
-    const maxParticipantsInput = window.prompt(
-      "최대 참여 인원을 입력하세요.",
-      "20",
-    );
-    const maxParticipants = Number(maxParticipantsInput || 20);
-
-    if (Number.isNaN(maxParticipants) || maxParticipants <= 0) {
-      alert("최대 참여 인원은 1명 이상의 숫자로 입력해야 합니다.");
+    if (type === "approveProject") {
+      setActionForm({
+        ...initialActionForm,
+        title: target.project_type
+          ? `${target.project_type} 프로젝트`
+          : "신규 프로젝트",
+        summary: target.space_address
+          ? `${target.space_address} 기반 프로젝트입니다.`
+          : "",
+      });
       return;
     }
 
-    const latitudeInput = window.prompt(
-      `주소: ${request.space_address || "주소 없음"}\n위도를 입력하세요.`,
-    );
-    if (!latitudeInput) return;
-
-    const longitudeInput = window.prompt(
-      `주소: ${request.space_address || "주소 없음"}\n경도를 입력하세요.`,
-    );
-    if (!longitudeInput) return;
-
-    const latitude = Number(latitudeInput);
-    const longitude = Number(longitudeInput);
-
-    if (Number.isNaN(latitude) || Number.isNaN(longitude)) {
-      alert("위도와 경도는 숫자로 입력해야 합니다.");
-      return;
-    }
-
-    const payload = {
-      title,
-      summary,
-      description: summary,
-      recruit_start_date: "2026-06-01",
-      recruit_end_date: "2026-06-10",
-      project_start_date: "2026-06-15",
-      project_end_date: "2026-07-05",
-      max_participants: maxParticipants,
-      latitude,
-      longitude,
-      is_visible: true,
-    };
-
-    try {
-      const response = await approveProjectRequest(request.request_id, payload);
-      alert(response.data.message || "의뢰가 승인되었습니다.");
-      loadRequestsData();
-    } catch (error) {
-      console.error("의뢰 승인 실패:", error);
-      alert("의뢰 승인 중 오류가 발생했습니다.");
-    }
+    setActionForm(initialActionForm);
   };
 
-  const handleRejectProjectRequest = async (requestId) => {
-    const rejectReason = window.prompt("반려 사유를 입력하세요.");
-    if (!rejectReason) return;
+  const closeActionModal = () => {
+    if (isProcessing) return;
 
-    try {
-      const response = await rejectProjectRequest(requestId, {
-        reject_reason: rejectReason,
-      });
-
-      alert(response.data.message || "의뢰가 반려되었습니다.");
-      loadRequestsData();
-    } catch (error) {
-      console.error("의뢰 반려 실패:", error);
-      alert("의뢰 반려 중 오류가 발생했습니다.");
-    }
+    setActionModal(null);
+    setActionForm(initialActionForm);
   };
 
-  const handleCancelProjectRequest = async (requestId) => {
-    const ok = window.confirm("이 의뢰를 취소 처리할까요?");
-    if (!ok) return;
+  const handleActionFormChange = (event) => {
+    const { name, value } = event.target;
 
-    try {
-      const response = await cancelProjectRequest(requestId);
-      alert(response.data.message || "의뢰가 취소 처리되었습니다.");
-      loadRequestsData();
-    } catch (error) {
-      console.error("의뢰 취소 실패:", error);
-      alert("의뢰 취소 중 오류가 발생했습니다.");
-    }
+    setActionForm((prev) => ({
+      ...prev,
+      [name]: value,
+    }));
   };
 
-  const handleApproveApplication = async (applicationId) => {
-    const ok = window.confirm("이 참여 신청을 승인할까요?");
-    if (!ok) return;
+  const handleSubmitAction = async (event) => {
+    event.preventDefault();
+
+    if (!actionModal) return;
+
+    const { type, target } = actionModal;
 
     try {
-      const response = await approveApplication(applicationId);
-      alert(response.data.message || "참여 신청이 승인되었습니다.");
-      loadRequestsData();
+      setIsProcessing(true);
+
+      if (type === "approveProject") {
+        const maxParticipants = Number(actionForm.max_participants || 20);
+        const latitude = Number(actionForm.latitude);
+        const longitude = Number(actionForm.longitude);
+
+        if (!actionForm.title.trim()) {
+          alert("프로젝트 제목을 입력해 주세요.");
+          return;
+        }
+
+        if (!actionForm.summary.trim()) {
+          alert("프로젝트 요약을 입력해 주세요.");
+          return;
+        }
+
+        if (Number.isNaN(maxParticipants) || maxParticipants <= 0) {
+          alert("최대 참여 인원은 1명 이상의 숫자로 입력해야 합니다.");
+          return;
+        }
+
+        if (Number.isNaN(latitude) || Number.isNaN(longitude)) {
+          alert("위도와 경도는 숫자로 입력해야 합니다.");
+          return;
+        }
+
+        const payload = {
+          title: actionForm.title,
+          summary: actionForm.summary,
+          description: actionForm.summary,
+          recruit_start_date: "2026-06-01",
+          recruit_end_date: "2026-06-10",
+          project_start_date: "2026-06-15",
+          project_end_date: "2026-07-05",
+          max_participants: maxParticipants,
+          latitude,
+          longitude,
+          is_visible: true,
+        };
+
+        const response = await approveProjectRequest(
+          target.request_id,
+          payload,
+        );
+        alert(response.data.message || "의뢰가 승인되었습니다.");
+      }
+
+      if (type === "rejectProject") {
+        if (!actionForm.reject_reason.trim()) {
+          alert("반려 사유를 입력해 주세요.");
+          return;
+        }
+
+        const response = await rejectProjectRequest(target.request_id, {
+          reject_reason: actionForm.reject_reason,
+        });
+
+        alert(response.data.message || "의뢰가 반려되었습니다.");
+      }
+
+      if (type === "cancelProject") {
+        const response = await cancelProjectRequest(target.request_id);
+        alert(response.data.message || "의뢰가 취소 처리되었습니다.");
+      }
+
+      if (type === "approveApplication") {
+        const response = await approveApplication(target.application_id);
+        alert(response.data.message || "참여 신청이 승인되었습니다.");
+      }
+
+      if (type === "rejectApplication") {
+        if (!actionForm.reject_reason.trim()) {
+          alert("반려 사유를 입력해 주세요.");
+          return;
+        }
+
+        const response = await rejectApplication(target.application_id, {
+          reject_reason: actionForm.reject_reason,
+        });
+
+        alert(response.data.message || "참여 신청이 반려되었습니다.");
+      }
+
+      if (type === "cancelApplication") {
+        const response = await cancelApplication(target.application_id);
+        alert(response.data.message || "참여 신청이 취소 처리되었습니다.");
+      }
+
+      closeActionModal();
+      loadRequestsData({ showLoading: false });
     } catch (error) {
-      console.error("참여 신청 승인 실패:", error);
-      alert("참여 신청 승인 중 오류가 발생했습니다.");
-    }
-  };
-
-  const handleRejectApplication = async (applicationId) => {
-    const rejectReason = window.prompt("반려 사유를 입력하세요.");
-    if (!rejectReason) return;
-
-    try {
-      const response = await rejectApplication(applicationId, {
-        reject_reason: rejectReason,
-      });
-
-      alert(response.data.message || "참여 신청이 반려되었습니다.");
-      loadRequestsData();
-    } catch (error) {
-      console.error("참여 신청 반려 실패:", error);
-      alert("참여 신청 반려 중 오류가 발생했습니다.");
-    }
-  };
-
-  const handleCancelApplication = async (applicationId) => {
-    const ok = window.confirm("이 참여 신청을 취소 처리할까요?");
-    if (!ok) return;
-
-    try {
-      const response = await cancelApplication(applicationId);
-      alert(response.data.message || "참여 신청이 취소 처리되었습니다.");
-      loadRequestsData();
-    } catch (error) {
-      console.error("참여 신청 취소 실패:", error);
-      alert("참여 신청 취소 중 오류가 발생했습니다.");
+      console.error("신청 처리 실패:", error);
+      alert("신청 처리 중 오류가 발생했습니다.");
+    } finally {
+      setIsProcessing(false);
     }
   };
 
@@ -337,6 +384,144 @@ export default function AdminRequestsPage() {
       return acc;
     }, {});
   }, [currentList]);
+
+  const renderModalTargetInfo = () => {
+    if (!actionModal) return null;
+
+    const { type, target } = actionModal;
+
+    if (type.includes("Project")) {
+      return (
+        <div className="admin-action-info-grid">
+          <div>
+            <span>의뢰자</span>
+            <strong>{target.requester_name || "-"}</strong>
+          </div>
+          <div>
+            <span>연락처</span>
+            <strong>{target.requester_phone || "-"}</strong>
+          </div>
+          <div>
+            <span>주소</span>
+            <strong>{target.space_address || "-"}</strong>
+          </div>
+          <div>
+            <span>유형</span>
+            <strong>{target.project_type || "-"}</strong>
+          </div>
+        </div>
+      );
+    }
+
+    return (
+      <div className="admin-action-info-grid">
+        <div>
+          <span>프로젝트</span>
+          <strong>{target.project_title || "-"}</strong>
+        </div>
+        <div>
+          <span>신청자</span>
+          <strong>{target.applicant_name || "-"}</strong>
+        </div>
+        <div>
+          <span>연락처</span>
+          <strong>{target.applicant_phone || "-"}</strong>
+        </div>
+        <div>
+          <span>직업</span>
+          <strong>{target.job || "-"}</strong>
+        </div>
+      </div>
+    );
+  };
+
+  const renderActionModalFields = () => {
+    if (!actionModal) return null;
+
+    const { type } = actionModal;
+
+    if (type === "approveProject") {
+      return (
+        <>
+          <div className="admin-field">
+            <label>프로젝트 제목 *</label>
+            <input
+              name="title"
+              value={actionForm.title}
+              onChange={handleActionFormChange}
+              placeholder="예: 춘천 폐자재 공간 재생 프로젝트"
+            />
+          </div>
+
+          <div className="admin-field">
+            <label>프로젝트 요약 *</label>
+            <textarea
+              name="summary"
+              value={actionForm.summary}
+              onChange={handleActionFormChange}
+              placeholder="프로젝트 요약을 입력하세요."
+            />
+          </div>
+
+          <div className="admin-form-grid">
+            <div className="admin-field">
+              <label>최대 참여 인원 *</label>
+              <input
+                name="max_participants"
+                value={actionForm.max_participants}
+                onChange={handleActionFormChange}
+                placeholder="20"
+              />
+            </div>
+
+            <div className="admin-field">
+              <label>위도 *</label>
+              <input
+                name="latitude"
+                value={actionForm.latitude}
+                onChange={handleActionFormChange}
+                placeholder="예: 37.5665"
+              />
+            </div>
+
+            <div className="admin-field">
+              <label>경도 *</label>
+              <input
+                name="longitude"
+                value={actionForm.longitude}
+                onChange={handleActionFormChange}
+                placeholder="예: 126.9780"
+              />
+            </div>
+          </div>
+        </>
+      );
+    }
+
+    if (type === "rejectProject" || type === "rejectApplication") {
+      return (
+        <div className="admin-field">
+          <label>반려 사유 *</label>
+          <textarea
+            name="reject_reason"
+            value={actionForm.reject_reason}
+            onChange={handleActionFormChange}
+            placeholder="반려 사유를 입력하세요."
+          />
+        </div>
+      );
+    }
+
+    return (
+      <div className="admin-action-confirm-box">
+        <strong>정말 취소 처리할까요?</strong>
+        <p>
+          취소 처리 후 상태가 변경됩니다. 계속 진행하려면 아래 버튼을 눌러
+          주세요.
+        </p>
+      </div>
+    );
+  };
 
   return (
     <section className="admin-page">
@@ -415,7 +600,6 @@ export default function AdminRequestsPage() {
               <table className="admin-table">
                 <thead>
                   <tr>
-                    <th>ID</th>
                     <th>의뢰자</th>
                     <th>연락처</th>
                     <th>주소</th>
@@ -429,7 +613,6 @@ export default function AdminRequestsPage() {
                 <tbody>
                   {filteredProjectRequests.map((request) => (
                     <tr key={request.request_id}>
-                      <td>{request.request_id}</td>
                       <td>
                         <strong className="admin-project-title">
                           {request.requester_name || "-"}
@@ -455,7 +638,9 @@ export default function AdminRequestsPage() {
                           <button
                             type="button"
                             className="admin-action approve"
-                            onClick={() => handleApproveProjectRequest(request)}
+                            onClick={() =>
+                              openActionModal("approveProject", request)
+                            }
                           >
                             승인
                           </button>
@@ -464,7 +649,7 @@ export default function AdminRequestsPage() {
                             type="button"
                             className="admin-action reject"
                             onClick={() =>
-                              handleRejectProjectRequest(request.request_id)
+                              openActionModal("rejectProject", request)
                             }
                           >
                             반려
@@ -474,7 +659,7 @@ export default function AdminRequestsPage() {
                             type="button"
                             className="admin-action cancel"
                             onClick={() =>
-                              handleCancelProjectRequest(request.request_id)
+                              openActionModal("cancelProject", request)
                             }
                           >
                             취소
@@ -545,9 +730,7 @@ export default function AdminRequestsPage() {
                             type="button"
                             className="admin-action approve"
                             onClick={() =>
-                              handleApproveApplication(
-                                application.application_id,
-                              )
+                              openActionModal("approveApplication", application)
                             }
                           >
                             승인
@@ -557,9 +740,7 @@ export default function AdminRequestsPage() {
                             type="button"
                             className="admin-action reject"
                             onClick={() =>
-                              handleRejectApplication(
-                                application.application_id,
-                              )
+                              openActionModal("rejectApplication", application)
                             }
                           >
                             반려
@@ -569,9 +750,7 @@ export default function AdminRequestsPage() {
                             type="button"
                             className="admin-action cancel"
                             onClick={() =>
-                              handleCancelApplication(
-                                application.application_id,
-                              )
+                              openActionModal("cancelApplication", application)
                             }
                           >
                             취소
@@ -585,6 +764,56 @@ export default function AdminRequestsPage() {
             </div>
           )}
         </section>
+      )}
+
+      {actionModal && (
+        <div className="admin-modal-backdrop">
+          <section className="admin-modal admin-action-modal">
+            <div className="admin-modal-head">
+              <div>
+                <span className="admin-eyebrow">
+                  {ACTION_MODAL_META[actionModal.type].eyebrow}
+                </span>
+                <h2>{ACTION_MODAL_META[actionModal.type].title}</h2>
+                <p>{ACTION_MODAL_META[actionModal.type].description}</p>
+              </div>
+
+              <button
+                type="button"
+                className="admin-modal-close"
+                onClick={closeActionModal}
+              >
+                ×
+              </button>
+            </div>
+
+            <form className="admin-edit-form" onSubmit={handleSubmitAction}>
+              {renderModalTargetInfo()}
+
+              {renderActionModalFields()}
+
+              <div className="admin-modal-actions">
+                <button
+                  type="button"
+                  className="admin-cancel-btn"
+                  onClick={closeActionModal}
+                >
+                  닫기
+                </button>
+
+                <button
+                  type="submit"
+                  className="admin-save-btn"
+                  disabled={isProcessing}
+                >
+                  {isProcessing
+                    ? "처리 중..."
+                    : ACTION_MODAL_META[actionModal.type].submitText}
+                </button>
+              </div>
+            </form>
+          </section>
+        </div>
       )}
     </section>
   );
