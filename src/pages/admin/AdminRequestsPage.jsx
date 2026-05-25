@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import {
   approveProjectRequest,
   cancelProjectRequest,
@@ -32,8 +32,42 @@ const extractPageContent = (responseData) => {
   return [];
 };
 
+const STATUS_FILTERS = [
+  { label: "전체", value: "ALL" },
+  { label: "대기", value: "PENDING" },
+  { label: "승인", value: "APPROVED" },
+  { label: "반려", value: "REJECTED" },
+  { label: "취소", value: "CANCELED" },
+];
+
+const STATUS_LABELS = {
+  PENDING: "대기",
+  APPROVED: "승인",
+  REJECTED: "반려",
+  CANCELED: "취소",
+};
+
+const formatDateTime = (value) => {
+  if (!value) return "-";
+
+  const date = new Date(value);
+
+  if (Number.isNaN(date.getTime())) {
+    return value;
+  }
+
+  return date.toLocaleString("ko-KR", {
+    year: "numeric",
+    month: "2-digit",
+    day: "2-digit",
+    hour: "2-digit",
+    minute: "2-digit",
+  });
+};
+
 export default function AdminRequestsPage() {
   const [activeTab, setActiveTab] = useState("projectRequests");
+  const [statusFilter, setStatusFilter] = useState("ALL");
   const [projectRequests, setProjectRequests] = useState([]);
   const [applications, setApplications] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
@@ -118,6 +152,11 @@ export default function AdminRequestsPage() {
 
   const handleRefresh = () => {
     loadRequestsData();
+  };
+
+  const handleChangeTab = (tab) => {
+    setActiveTab(tab);
+    setStatusFilter("ALL");
   };
 
   const handleApproveProjectRequest = async (request) => {
@@ -262,13 +301,50 @@ export default function AdminRequestsPage() {
 
   const safeApplications = Array.isArray(applications) ? applications : [];
 
+  const currentList =
+    activeTab === "projectRequests" ? safeProjectRequests : safeApplications;
+
+  const filteredProjectRequests = useMemo(() => {
+    if (statusFilter === "ALL") {
+      return safeProjectRequests;
+    }
+
+    return safeProjectRequests.filter(
+      (request) => request.status === statusFilter,
+    );
+  }, [safeProjectRequests, statusFilter]);
+
+  const filteredApplications = useMemo(() => {
+    if (statusFilter === "ALL") {
+      return safeApplications;
+    }
+
+    return safeApplications.filter(
+      (application) => application.status === statusFilter,
+    );
+  }, [safeApplications, statusFilter]);
+
+  const statusCounts = useMemo(() => {
+    return STATUS_FILTERS.reduce((acc, filter) => {
+      if (filter.value === "ALL") {
+        acc[filter.value] = currentList.length;
+      } else {
+        acc[filter.value] = currentList.filter(
+          (item) => item.status === filter.value,
+        ).length;
+      }
+
+      return acc;
+    }, {});
+  }, [currentList]);
+
   return (
     <section className="admin-page">
       <div className="admin-page-head">
         <div>
-          <span className="admin-eyebrow">REQUESTS</span>
+          <span className="admin-eyebrow">team 우당탕탕</span>
           <h1>신청 관리</h1>
-          <p>프로젝트 의뢰 신청과 참여 신청을 승인하거나 반려합니다.</p>
+          <p>프로젝트 의뢰 신청과 참여 신청을 관리합니다.</p>
         </div>
 
         <button
@@ -284,18 +360,39 @@ export default function AdminRequestsPage() {
         <button
           type="button"
           className={activeTab === "projectRequests" ? "active" : ""}
-          onClick={() => setActiveTab("projectRequests")}
+          onClick={() => handleChangeTab("projectRequests")}
         >
-          의뢰 신청
+          프로젝트 의뢰 신청
         </button>
 
         <button
           type="button"
           className={activeTab === "applications" ? "active" : ""}
-          onClick={() => setActiveTab("applications")}
+          onClick={() => handleChangeTab("applications")}
         >
-          참여 신청
+          프로젝트 참여 신청
         </button>
+      </div>
+
+      <div className="admin-filter-card">
+        <div>
+          <strong>상태 필터</strong>
+          <p>신청 상태별로 목록을 확인할 수 있습니다.</p>
+        </div>
+
+        <div className="admin-status-filter">
+          {STATUS_FILTERS.map((filter) => (
+            <button
+              type="button"
+              key={filter.value}
+              className={statusFilter === filter.value ? "active" : ""}
+              onClick={() => setStatusFilter(filter.value)}
+            >
+              {filter.label}
+              <span>{statusCounts[filter.value] ?? 0}</span>
+            </button>
+          ))}
+        </div>
       </div>
 
       {isLoading && (
@@ -306,11 +403,13 @@ export default function AdminRequestsPage() {
         <section className="admin-table-card">
           <div className="admin-table-head">
             <h2>의뢰 신청 목록</h2>
-            <span>{safeProjectRequests.length}건</span>
+            <span>{filteredProjectRequests.length}건</span>
           </div>
 
-          {safeProjectRequests.length === 0 ? (
-            <div className="admin-empty">등록된 의뢰 신청이 없습니다.</div>
+          {filteredProjectRequests.length === 0 ? (
+            <div className="admin-empty admin-table-empty">
+              조건에 맞는 의뢰 신청이 없습니다.
+            </div>
           ) : (
             <div className="admin-table-wrap">
               <table className="admin-table">
@@ -328,21 +427,29 @@ export default function AdminRequestsPage() {
                 </thead>
 
                 <tbody>
-                  {safeProjectRequests.map((request) => (
+                  {filteredProjectRequests.map((request) => (
                     <tr key={request.request_id}>
                       <td>{request.request_id}</td>
-                      <td>{request.requester_name}</td>
-                      <td>{request.requester_phone}</td>
-                      <td className="admin-td-wide">{request.space_address}</td>
-                      <td>{request.project_type}</td>
+                      <td>
+                        <strong className="admin-project-title">
+                          {request.requester_name || "-"}
+                        </strong>
+                      </td>
+                      <td>{request.requester_phone || "-"}</td>
+                      <td className="admin-td-wide">
+                        {request.space_address || "-"}
+                      </td>
+                      <td>{request.project_type || "-"}</td>
                       <td>
                         <span
-                          className={`admin-status ${request.status?.toLowerCase()}`}
+                          className={`admin-status ${request.status?.toLowerCase() || ""}`}
                         >
-                          {request.status}
+                          {STATUS_LABELS[request.status] ||
+                            request.status ||
+                            "-"}
                         </span>
                       </td>
-                      <td>{request.created_at}</td>
+                      <td>{formatDateTime(request.created_at)}</td>
                       <td>
                         <div className="admin-action-group">
                           <button
@@ -387,11 +494,13 @@ export default function AdminRequestsPage() {
         <section className="admin-table-card">
           <div className="admin-table-head">
             <h2>참여 신청 목록</h2>
-            <span>{safeApplications.length}건</span>
+            <span>{filteredApplications.length}건</span>
           </div>
 
-          {safeApplications.length === 0 ? (
-            <div className="admin-empty">등록된 참여 신청이 없습니다.</div>
+          {filteredApplications.length === 0 ? (
+            <div className="admin-empty admin-table-empty">
+              조건에 맞는 참여 신청이 없습니다.
+            </div>
           ) : (
             <div className="admin-table-wrap">
               <table className="admin-table">
@@ -409,23 +518,27 @@ export default function AdminRequestsPage() {
                 </thead>
 
                 <tbody>
-                  {safeApplications.map((application) => (
+                  {filteredApplications.map((application) => (
                     <tr key={application.application_id}>
                       <td>{application.application_id}</td>
                       <td className="admin-td-wide">
-                        {application.project_title}
+                        <strong className="admin-project-title">
+                          {application.project_title || "-"}
+                        </strong>
                       </td>
-                      <td>{application.applicant_name}</td>
-                      <td>{application.applicant_phone}</td>
-                      <td>{application.job}</td>
+                      <td>{application.applicant_name || "-"}</td>
+                      <td>{application.applicant_phone || "-"}</td>
+                      <td>{application.job || "-"}</td>
                       <td>
                         <span
-                          className={`admin-status ${application.status?.toLowerCase()}`}
+                          className={`admin-status ${application.status?.toLowerCase() || ""}`}
                         >
-                          {application.status}
+                          {STATUS_LABELS[application.status] ||
+                            application.status ||
+                            "-"}
                         </span>
                       </td>
-                      <td>{application.created_at}</td>
+                      <td>{formatDateTime(application.created_at)}</td>
                       <td>
                         <div className="admin-action-group">
                           <button
