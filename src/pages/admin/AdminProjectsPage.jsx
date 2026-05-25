@@ -186,7 +186,7 @@ export default function AdminProjectsPage() {
     <section className="admin-page">
       <div className="admin-page-head">
         <div>
-          <span className="admin-eyebrow">PROJECTS</span>
+          <span className="admin-eyebrow">team 우당탕탕</span>
           <h1>프로젝트 관리</h1>
           <p>등록된 프로젝트의 상태, 노출 여부, 기본 정보를 관리합니다.</p>
         </div>
@@ -210,13 +210,14 @@ export default function AdminProjectsPage() {
           </div>
 
           {projects.length === 0 ? (
-            <div className="admin-empty">등록된 프로젝트가 없습니다.</div>
+            <div className="admin-empty admin-table-empty">
+              등록된 프로젝트가 없습니다.
+            </div>
           ) : (
             <div className="admin-table-wrap">
               <table className="admin-table">
                 <thead>
                   <tr>
-                    <th>ID</th>
                     <th>프로젝트명</th>
                     <th>지역</th>
                     <th>유형</th>
@@ -230,8 +231,6 @@ export default function AdminProjectsPage() {
                 <tbody>
                   {projects.map((project) => (
                     <tr key={project.project_id}>
-                      <td>{project.project_id}</td>
-
                       <td className="admin-td-wide">
                         <strong className="admin-project-title">
                           {project.title}

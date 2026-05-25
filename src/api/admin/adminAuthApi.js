@@ -11,6 +11,6 @@ export const adminLogout = () => {
 };
 
 // 현재 로그인 관리자 조회
-export const getAdminMe = () => {
+export const getCurrentAdmin = () => {
   return axiosInstance.get("/api/v1/admin/auth/me");
 };

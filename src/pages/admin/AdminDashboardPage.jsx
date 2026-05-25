@@ -1,24 +1,58 @@
-import { useEffect, useState } from "react";
-import { getAdminStatisticsSummary } from "../../api/admin/adminStatApi";
+import { useEffect, useMemo, useState } from "react";
+import {
+  getAdminStatisticsSummary,
+  getAdminSiteStats,
+} from "../../api/admin/adminStatApi";
 
 export default function AdminDashboardPage() {
   const [summary, setSummary] = useState(null);
+  const [siteStats, setSiteStats] = useState([]);
+  const [isLoading, setIsLoading] = useState(true);
+
+  const normalizeList = (data, key) => {
+    if (Array.isArray(data)) return data;
+    if (Array.isArray(data?.content)) return data.content;
+    if (Array.isArray(data?.[key])) return data[key];
+    return [];
+  };
 
   useEffect(() => {
-    const fetchSummary = async () => {
+    let ignore = false;
+
+    const fetchDashboard = async () => {
       try {
-        const response = await getAdminStatisticsSummary();
-        setSummary(response.data);
+        setIsLoading(true);
+
+        const [summaryResponse, siteStatsResponse] = await Promise.all([
+          getAdminStatisticsSummary(),
+          getAdminSiteStats(),
+        ]);
+
+        if (!ignore) {
+          setSummary(summaryResponse.data);
+          setSiteStats(normalizeList(siteStatsResponse.data, "stats"));
+        }
       } catch (error) {
-        console.error("관리자 통계 요약 조회 실패:", error);
-        setSummary(null);
+        if (!ignore) {
+          console.error("관리자 대시보드 조회 실패:", error);
+          setSummary(null);
+          setSiteStats([]);
+        }
+      } finally {
+        if (!ignore) {
+          setIsLoading(false);
+        }
       }
     };
 
-    fetchSummary();
+    fetchDashboard();
+
+    return () => {
+      ignore = true;
+    };
   }, []);
 
-  const cards = [
+  const applicationCards = [
     {
       label: "전체 프로젝트",
       value: summary?.total_projects ?? 0,
@@ -49,50 +83,130 @@ export default function AdminDashboardPage() {
     },
   ];
 
+  const maxSiteStatValue = useMemo(() => {
+    if (siteStats.length === 0) return 0;
+
+    return Math.max(...siteStats.map((stat) => Number(stat.stat_value) || 0));
+  }, [siteStats]);
+
   return (
     <section className="admin-page">
       <div className="admin-page-head">
         <div>
-          <span className="admin-eyebrow">DASHBOARD</span>
-          <h1>관리자 대시보드</h1>
-          <p>프로젝트 운영 현황과 신청 현황을 한눈에 확인합니다.</p>
+          <span className="admin-eyebrow">team 우당탕탕</span>
+          <h1>DASHBOARD</h1>
+          <p>데이터를 한눈에 관리하고 확인합니다.</p>
         </div>
       </div>
 
-      <div className="admin-stat-grid">
-        {cards.map((card) => (
-          <article className="admin-stat-card" key={card.label}>
-            <span>{card.label}</span>
-            <strong>{card.value}</strong>
-          </article>
-        ))}
-      </div>
+      {isLoading ? (
+        <div className="admin-empty">대시보드 데이터를 불러오는 중입니다.</div>
+      ) : (
+        <>
+          <section className="admin-dashboard-card">
+            <div className="admin-stat-grid">
+              {applicationCards.map((card) => (
+                <article
+                  className="admin-stat-card dashboard-main-stat"
+                  key={card.label}
+                >
+                  <span>{card.label}</span>
+                  <strong>{Number(card.value).toLocaleString()}</strong>
+                </article>
+              ))}
+            </div>
+          </section>
 
-      <section className="admin-guide-card">
-        <h2>관리 메뉴</h2>
+          <section className="admin-dashboard-card">
+            <div className="admin-dashboard-head">
+              <div>
+                <h2>누적 데이터</h2>
+                <p>사이트에 노출하거나 관리하는 주요 누적 지표입니다.</p>
+              </div>
 
-        <div className="admin-guide-grid">
-          <div>
-            <h3>신청 관리</h3>
-            <p>프로젝트 의뢰 신청과 참여 신청을 승인/반려합니다.</p>
-          </div>
+              <span className="admin-dashboard-count">
+                {siteStats.length}건
+              </span>
+            </div>
 
-          <div>
-            <h3>프로젝트 관리</h3>
-            <p>등록된 프로젝트의 정보와 상태를 수정합니다.</p>
-          </div>
+            {siteStats.length === 0 ? (
+              <div className="admin-dashboard-chart empty-chart">
+                <div className="admin-dashboard-chart-head">
+                  <h3>누적 데이터 비교</h3>
+                  <span>값 기준</span>
+                </div>
 
-          <div>
-            <h3>콘텐츠 관리</h3>
-            <p>외부 콘텐츠를 등록하거나 자동 수집을 실행합니다.</p>
-          </div>
+                <div className="dashboard-empty-graph">
+                  <div className="dashboard-empty-bars">
+                    <span />
+                    <span />
+                    <span />
+                    <span />
+                  </div>
 
-          <div>
-            <h3>문자 발송</h3>
-            <p>신청자 또는 의뢰자에게 안내 문자를 발송합니다.</p>
-          </div>
-        </div>
-      </section>
+                  <strong>등록된 누적 데이터가 없습니다.</strong>
+                  <p>
+                    통계 관리에서 누적 데이터를 추가하면 이곳에 그래프로
+                    표시됩니다.
+                  </p>
+                </div>
+              </div>
+            ) : (
+              <>
+                <div className="admin-stat-grid">
+                  {siteStats.map((stat) => (
+                    <article className="admin-stat-card" key={stat.stat_id}>
+                      <span>{stat.stat_label}</span>
+                      <strong>
+                        {Number(stat.stat_value || 0).toLocaleString()}
+                      </strong>
+                      <p className="dashboard-stat-desc">
+                        {stat.description || "설명 없음"}
+                      </p>
+                    </article>
+                  ))}
+                </div>
+
+                <div className="admin-dashboard-chart">
+                  <div className="admin-dashboard-chart-head">
+                    <h3>누적 데이터 비교</h3>
+                    <span>값 기준</span>
+                  </div>
+
+                  <div className="admin-dashboard-bar-list">
+                    {siteStats.map((stat) => {
+                      const value = Number(stat.stat_value) || 0;
+                      const width =
+                        maxSiteStatValue > 0
+                          ? Math.max((value / maxSiteStatValue) * 100, 5)
+                          : 0;
+
+                      return (
+                        <div
+                          className="admin-dashboard-bar-item"
+                          key={stat.stat_id}
+                        >
+                          <div className="admin-dashboard-bar-label">
+                            <span>{stat.stat_label}</span>
+                            <strong>{value.toLocaleString()}</strong>
+                          </div>
+
+                          <div className="admin-dashboard-bar-track">
+                            <div
+                              className="admin-dashboard-bar-fill"
+                              style={{ width: `${width}%` }}
+                            />
+                          </div>
+                        </div>
+                      );
+                    })}
+                  </div>
+                </div>
+              </>
+            )}
+          </section>
+        </>
+      )}
     </section>
   );
 }
