@@ -47,15 +47,6 @@ export default function Footer() {
             </li>
           </ul>
         </div>
-
-        <div className="footer-col">
-          <h5>관리</h5>
-          <ul>
-            <li>
-              <Link to="/admin/login">관리자 로그인</Link>
-            </li>
-          </ul>
-        </div>
       </div>
 
       <div className="shell footer-bottom">
