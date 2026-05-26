@@ -5,10 +5,7 @@ export default function Header() {
     <header className="header">
       <div className="shell header-inner">
         <Link to="/" className="logo">
-          <span className="pre">studio&amp;lab</span>
-          <span className="name">
-            우당탕탕<span className="dot">.</span>
-          </span>
+          <span className="name">스튜디오 우당탕탕</span>
         </Link>
 
         <nav className="nav">
