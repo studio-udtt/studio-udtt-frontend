@@ -1,5 +1,5 @@
-import chaAramImage from "../assets/images/cha-aram.jpg";
-import yoonJoosunImage from "../assets/images/yoon-joosun.jpg";
+import chaAramImage from "../assets/images/cha-aram.Jpg";
+import yoonJoosunImage from "../assets/images/yoon-joosun.Jpg";
 
 export default function AboutPage() {
   return (
