@@ -3,6 +3,7 @@
   display: grid;
   place-items: center;
   color: var(--muted);
+  font-weight: 600;
 }
 
 .map-layout {
@@ -55,18 +56,18 @@
 .map-toolbar button {
   padding: 8px 16px;
   font-size: 14px;
+  font-weight: 600;
   border-radius: 999px;
   color: var(--muted);
-  font-family: var(--font-display);
 }
 
 .map-toolbar button.on {
-  background: var(--terra);
-  color: var(--surface);
+  background: var(--brown-dk);
+  color: var(--accent-sf);
 }
 
 .map-toolbar button.on.complete {
-  background: var(--brown);
+  background: var(--terra);
   color: var(--surface);
 }
 
@@ -83,20 +84,22 @@
 }
 
 .map-counter .n {
-  font-family: var(--font-display);
   font-size: 26px;
+  font-weight: 600;
   color: var(--brown-dk);
   line-height: 1;
 }
 
 .map-counter .n span {
   font-size: 14px;
+  font-weight: 600;
   color: var(--muted);
   margin-left: 2px;
 }
 
 .map-counter .l {
   font-size: 11px;
+  font-weight: 600;
   color: var(--muted);
   letter-spacing: 0.08em;
   margin-top: 4px;
@@ -149,8 +152,8 @@
   position: absolute;
   transform: translate(-50%, 14px);
   font-size: 12px;
+  font-weight: 600;
   color: var(--brown);
-  font-family: var(--font-display);
   white-space: nowrap;
   background: rgba(255, 255, 255, 0.75);
   padding: 1px 6px;
@@ -177,6 +180,7 @@
   align-items: center;
   gap: 8px;
   color: var(--muted);
+  font-weight: 600;
 }
 
 .legend-dot {
@@ -205,6 +209,7 @@
 .info-panel .region-tag {
   display: inline-block;
   font-size: 12px;
+  font-weight: 600;
   background: var(--accent-sf);
   color: var(--accent-dk);
   padding: 5px 10px;
@@ -216,13 +221,14 @@
   align-items: center;
   gap: 6px;
   font-size: 13px;
+  font-weight: 600;
   color: var(--terra-dk);
   margin-left: 8px;
 }
 
 .info-panel h2 {
-  font-family: var(--font-display);
   font-size: 26px;
+  font-weight: 600;
   color: var(--brown-dk);
   margin: 12px 0;
   line-height: 1.25;
@@ -231,6 +237,7 @@
 .info-panel .desc {
   color: var(--muted);
   font-size: 15px;
+  line-height: 1.65;
   margin-bottom: 22px;
 }
 
@@ -253,13 +260,14 @@
 
 .info-meta .k {
   font-size: 13px;
+  font-weight: 600;
   color: var(--muted);
 }
 
 .info-meta .v {
-  font-family: var(--font-display);
   color: var(--fg);
   font-size: 15px;
+  font-weight: 600;
 }
 
 .info-progress {
@@ -287,13 +295,14 @@
   display: flex;
   justify-content: space-between;
   font-size: 13px;
+  font-weight: 600;
   color: var(--muted);
 }
 
 .info-progress .lbl strong {
   color: var(--brown-dk);
-  font-family: var(--font-display);
   font-size: 15px;
+  font-weight: 600;
 }
 
 .info-cta {
@@ -303,8 +312,8 @@
   background: var(--brown-dk);
   color: var(--surface);
   border-radius: var(--radius);
-  font-family: var(--font-display);
   font-size: 17px;
+  font-weight: 600;
   text-align: center;
   transition: all 0.15s;
 }

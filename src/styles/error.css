@@ -18,16 +18,16 @@
 
 .not-found-card > span {
   display: inline-block;
-  font-family: var(--font-display);
   font-size: 64px;
+  font-weight: 600;
   color: var(--terra);
   line-height: 1;
   margin-bottom: 18px;
 }
 
 .not-found-card h1 {
-  font-family: var(--font-display);
   font-size: 30px;
+  font-weight: 600;
   color: var(--brown-dk);
   margin-bottom: 10px;
 }
@@ -35,6 +35,7 @@
 .not-found-card p {
   color: var(--muted);
   font-size: 15px;
+  font-weight: 500;
   margin-bottom: 28px;
 }
 
@@ -55,6 +56,7 @@
 .admin-not-found-card span {
   display: inline-block;
   font-size: 12px;
+  font-weight: 600;
   letter-spacing: 0.14em;
   color: var(--terra-dk);
   background: var(--terra-sf);
@@ -64,13 +66,14 @@
 }
 
 .admin-not-found-card h1 {
-  font-family: var(--font-display);
   color: var(--brown-dk);
   font-size: 28px;
+  font-weight: 600;
   margin-bottom: 8px;
 }
 
 .admin-not-found-card p {
   color: var(--muted);
+  font-weight: 500;
   margin-bottom: 24px;
 }

@@ -42,7 +42,6 @@
 }
 
 .admin-login-head h1 {
-  font-family: var(--font-display);
   font-size: 30px;
   color: var(--brown-dk);
   margin-bottom: 8px;
@@ -64,7 +63,6 @@
 }
 
 .admin-field label {
-  font-family: var(--font-display);
   color: var(--brown-dk);
   font-size: 14px;
 }
@@ -90,7 +88,6 @@
   color: var(--surface);
   border-radius: var(--radius);
   padding: 14px;
-  font-family: var(--font-display);
   font-size: 17px;
 }
 
@@ -122,7 +119,6 @@
 }
 
 .admin-brand strong {
-  font-family: var(--font-display);
   font-size: 22px;
   color: var(--surface);
 }
@@ -133,7 +129,6 @@
   margin-top: 4px;
   color: rgba(234, 219, 184, 0.55);
   font-size: 12px;
-  font-family: inherit;
 }
 
 .admin-nav {
@@ -146,7 +141,6 @@
   padding: 12px 14px;
   border-radius: var(--radius-sm);
   color: rgba(234, 219, 184, 0.65);
-  font-family: var(--font-display);
   font-size: 15px;
   transition: all 0.15s;
 }
@@ -167,7 +161,6 @@
   border-radius: var(--radius-sm);
   background: rgba(234, 219, 184, 0.08);
   color: var(--accent-sf);
-  font-family: var(--font-display);
 }
 
 .admin-logout:hover {
@@ -204,7 +197,6 @@
 }
 
 .admin-page-head h1 {
-  font-family: var(--font-display);
   font-size: 34px;
   color: var(--brown-dk);
 }
@@ -235,7 +227,6 @@
 }
 
 .admin-stat-card strong {
-  font-family: var(--font-display);
   font-size: 34px;
   color: var(--brown-dk);
   line-height: 1;
@@ -249,7 +240,6 @@
 }
 
 .admin-guide-card h2 {
-  font-family: var(--font-display);
   color: var(--brown-dk);
   margin-bottom: 18px;
 }
@@ -268,7 +258,6 @@
 }
 
 .admin-guide-grid h3 {
-  font-family: var(--font-display);
   color: var(--brown-dk);
   margin-bottom: 6px;
 }
@@ -297,7 +286,6 @@
     color: var(--surface);
     border-radius: var(--radius-sm);
     padding: 11px 16px;
-    font-family: var(--font-display);
     font-size: 14px;
   }
 
@@ -319,7 +307,6 @@
     padding: 10px 22px;
     border-radius: 999px;
     color: var(--muted);
-    font-family: var(--font-display);
     font-size: 15px;
   }
 
@@ -344,7 +331,6 @@
   }
 
   .admin-table-head h2 {
-    font-family: var(--font-display);
     font-size: 20px;
     color: var(--brown-dk);
   }
@@ -377,7 +363,6 @@
   .admin-table th {
     background: var(--bg);
     color: var(--brown-dk);
-    font-family: var(--font-display);
     white-space: nowrap;
   }
 
@@ -401,7 +386,6 @@
     border-radius: 999px;
     background: var(--paper);
     color: var(--muted);
-    font-family: var(--font-display);
     font-size: 12px;
     white-space: nowrap;
   }
@@ -431,7 +415,6 @@
   .admin-action {
     padding: 7px 10px;
     border-radius: var(--radius-sm);
-    font-family: var(--font-display);
     font-size: 12px;
     white-space: nowrap;
   }
@@ -467,7 +450,6 @@
   .admin-project-title {
     display: block;
     color: var(--brown-dk);
-    font-family: var(--font-display);
     font-size: 15px;
     margin-bottom: 4px;
   }
@@ -485,7 +467,6 @@
     color: var(--brown-dk);
     border-radius: var(--radius-sm);
     padding: 8px 10px;
-    font-family: var(--font-display);
     font-size: 12px;
     outline: none;
   }
@@ -500,7 +481,6 @@
     align-items: center;
     padding: 5px 9px;
     border-radius: 999px;
-    font-family: var(--font-display);
     font-size: 12px;
     white-space: nowrap;
   }
@@ -546,7 +526,6 @@
   }
 
   .admin-modal-head h2 {
-    font-family: var(--font-display);
     color: var(--brown-dk);
     font-size: 26px;
   }
@@ -619,7 +598,6 @@
   .admin-save-btn {
     border-radius: var(--radius-sm);
     padding: 12px 18px;
-    font-family: var(--font-display);
     font-size: 14px;
   }
 
@@ -659,7 +637,6 @@
     color: var(--surface);
     border-radius: var(--radius-sm);
     padding: 11px 16px;
-    font-family: var(--font-display);
     font-size: 14px;
   }
 
@@ -677,7 +654,6 @@
   }
 
   .admin-crawl-card h2 {
-    font-family: var(--font-display);
     color: var(--brown-dk);
     font-size: 20px;
     margin-bottom: 6px;
@@ -716,7 +692,6 @@
     color: var(--surface);
     border-radius: var(--radius-sm);
     padding: 11px 16px;
-    font-family: var(--font-display);
     font-size: 14px;
     white-space: nowrap;
   }
@@ -727,7 +702,6 @@
 
   .admin-source-link {
     color: var(--accent-dk);
-    font-family: var(--font-display);
   }
 
   .admin-source-link:hover {
@@ -810,7 +784,6 @@
     color: var(--surface);
     border-radius: var(--radius-sm);
     padding: 0 14px;
-    font-family: var(--font-display);
   }
 
   .admin-inline-field button:hover {
@@ -829,7 +802,6 @@
     color: var(--surface);
     border-radius: var(--radius);
     padding: 14px;
-    font-family: var(--font-display);
     font-size: 16px;
   }
 
@@ -842,7 +814,6 @@
     color: var(--brown-dk);
     border-radius: var(--radius-sm);
     padding: 8px 12px;
-    font-family: var(--font-display);
     font-size: 13px;
   }
 
@@ -874,7 +845,6 @@
   .admin-target-item strong {
     display: block;
     color: var(--brown-dk);
-    font-family: var(--font-display);
     font-size: 14px;
   }
 
@@ -914,7 +884,6 @@
 
   .admin-sms-detail strong {
     color: var(--brown-dk);
-    font-family: var(--font-display);
     font-size: 16px;
   }
 
@@ -931,7 +900,6 @@
   }
 
   .admin-recipient-detail-list h3 {
-    font-family: var(--font-display);
     color: var(--brown-dk);
     font-size: 18px;
   }
@@ -949,7 +917,6 @@
 
   .admin-recipient-detail-item span {
     color: var(--brown-dk);
-    font-family: var(--font-display);
   }
 
   .admin-recipient-detail-item strong {
@@ -991,7 +958,6 @@
   }
 
   .admin-stat-value {
-    font-family: var(--font-display);
     color: var(--terra);
     font-size: 18px;
   }
@@ -1029,7 +995,6 @@
     color: var(--surface);
     border-radius: var(--radius-sm);
     padding: 10px 14px;
-    font-family: var(--font-display);
     font-size: 13px;
   }
 
@@ -1067,7 +1032,6 @@
   }
 
   .admin-dashboard-head h2 {
-    font-family: var(--font-display);
     color: var(--brown-dk);
     font-size: 24px;
     margin-bottom: 6px;
@@ -1086,7 +1050,6 @@
     color: var(--accent-dk);
     border-radius: 999px;
     padding: 7px 12px;
-    font-family: var(--font-display);
     font-size: 13px;
     white-space: nowrap;
   }
@@ -1125,7 +1088,6 @@
   }
 
   .admin-dashboard-chart-head h3 {
-    font-family: var(--font-display);
     color: var(--brown-dk);
     font-size: 20px;
   }
@@ -1154,13 +1116,11 @@
 
   .admin-dashboard-bar-label span {
     color: var(--brown-dk);
-    font-family: var(--font-display);
     font-size: 14px;
   }
 
   .admin-dashboard-bar-label strong {
     color: var(--terra);
-    font-family: var(--font-display);
     font-size: 15px;
   }
 
@@ -1206,7 +1166,6 @@
 }
 
 .admin-dashboard-head h2 {
-  font-family: var(--font-display);
   color: var(--brown-dk);
   font-size: 24px;
   margin-bottom: 6px;
@@ -1225,7 +1184,6 @@
   color: var(--accent-dk);
   border-radius: 999px;
   padding: 7px 12px;
-  font-family: var(--font-display);
   font-size: 13px;
   white-space: nowrap;
 }
@@ -1246,7 +1204,6 @@
 }
 
 .admin-dashboard-chart-head h3 {
-  font-family: var(--font-display);
   color: var(--brown-dk);
   font-size: 20px;
 }
@@ -1270,7 +1227,6 @@
 }
 
 .dashboard-empty-graph strong {
-  font-family: var(--font-display);
   color: var(--brown-dk);
   font-size: 20px;
   margin-top: 14px;
@@ -1330,13 +1286,11 @@
 
 .admin-dashboard-bar-label span {
   color: var(--brown-dk);
-  font-family: var(--font-display);
   font-size: 14px;
 }
 
 .admin-dashboard-bar-label strong {
   color: var(--terra);
-  font-family: var(--font-display);
   font-size: 15px;
 }
 
@@ -1370,7 +1324,6 @@
 
 .admin-filter-card strong {
   display: block;
-  font-family: var(--font-display);
   color: var(--brown-dk);
   font-size: 18px;
   margin-bottom: 4px;
@@ -1394,7 +1347,6 @@
   color: var(--muted);
   border-radius: 999px;
   padding: 9px 14px;
-  font-family: var(--font-display);
   font-size: 13px;
   transition: all 0.15s ease;
 }
@@ -1430,7 +1382,6 @@
 }
 
 .admin-table-head h2 {
-  font-family: var(--font-display);
   color: var(--brown-dk);
   font-size: 22px;
 }
@@ -1440,7 +1391,6 @@
   background: var(--terra-sf);
   border-radius: 999px;
   padding: 6px 10px;
-  font-family: var(--font-display);
   font-size: 13px;
 }
 
@@ -1467,7 +1417,6 @@
 .admin-table th {
   background: var(--bg);
   color: var(--brown-dk);
-  font-family: var(--font-display);
   white-space: nowrap;
 }
 
@@ -1494,7 +1443,6 @@
   min-width: 58px;
   padding: 6px 10px;
   border-radius: 999px;
-  font-family: var(--font-display);
   font-size: 12px;
   white-space: nowrap;
 }
@@ -1530,7 +1478,6 @@
 .admin-action {
   padding: 7px 10px;
   border-radius: var(--radius-sm);
-  font-family: var(--font-display);
   font-size: 12px;
   white-space: nowrap;
   transition: all 0.15s ease;
@@ -1561,7 +1508,6 @@
   color: var(--surface);
   border-radius: var(--radius-sm);
   padding: 11px 16px;
-  font-family: var(--font-display);
   font-size: 14px;
 }
 
@@ -1600,7 +1546,6 @@
   padding: 11px 22px;
   border-radius: 999px;
   color: var(--muted);
-  font-family: var(--font-display);
   font-size: 15px;
   transition: all 0.15s ease;
 }
@@ -1623,7 +1568,6 @@
   align-items: center;
   justify-content: center;
   padding: 48px 24px;
-  font-family: var(--font-display);
   font-size: 18px;
   color: var(--muted);
   background:
@@ -1666,7 +1610,6 @@
 
 .admin-action-info-grid strong {
   color: var(--brown-dk);
-  font-family: var(--font-display);
   font-size: 15px;
   line-height: 1.4;
 }
@@ -1682,7 +1625,6 @@
 
 .admin-action-confirm-box strong {
   color: var(--terra-dk);
-  font-family: var(--font-display);
   font-size: 18px;
 }
 
@@ -1742,7 +1684,6 @@
 }
 
 .admin-modal-head h2 {
-  font-family: var(--font-display);
   color: var(--brown-dk);
   font-size: 28px;
   margin-top: 4px;
@@ -1796,7 +1737,6 @@
 
 .admin-action-info-grid strong {
   color: var(--brown-dk);
-  font-family: var(--font-display);
   font-size: 15px;
   line-height: 1.4;
 }
@@ -1813,7 +1753,6 @@
 
 .admin-action-confirm-box strong {
   color: var(--terra-dk);
-  font-family: var(--font-display);
   font-size: 18px;
 }
 
@@ -1834,7 +1773,6 @@
 .admin-save-btn {
   border-radius: var(--radius-sm) !important;
   padding: 11px 16px !important;
-  font-family: var(--font-display) !important;
   font-size: 14px !important;
 }
 
@@ -1879,7 +1817,6 @@
 }
 
 .admin-crawl-card h2 {
-  font-family: var(--font-display);
   color: var(--brown-dk);
   font-size: 24px;
   margin-bottom: 6px;
@@ -1920,7 +1857,6 @@
   color: var(--surface);
   border-radius: var(--radius-sm);
   padding: 12px 16px;
-  font-family: var(--font-display);
   font-size: 14px;
   white-space: nowrap;
 }
@@ -1942,7 +1878,6 @@
   color: var(--accent-dk);
   border-radius: 999px;
   padding: 6px 10px;
-  font-family: var(--font-display);
   font-size: 12px;
   white-space: nowrap;
 }
@@ -1953,7 +1888,6 @@
   color: var(--brown-dk);
   border-radius: 999px;
   padding: 8px 12px;
-  font-family: var(--font-display);
   font-size: 12px;
   outline: none;
 }
@@ -1969,7 +1903,6 @@
   align-items: center;
   justify-content: center;
   padding: 56px 24px;
-  font-family: var(--font-display);
   font-size: 18px;
   color: var(--muted);
   background:
@@ -2008,9 +1941,8 @@
   border: none;
   border-radius: var(--radius-sm);
   padding: 12px 16px;
-  font-family: var(--font-display);
   font-size: 14px;
-  font-weight: 700;
+  font-weight: 600;
   white-space: nowrap;
   box-shadow: 0 10px 24px rgba(181, 89, 63, 0.18);
   transition:
@@ -2035,9 +1967,8 @@
   border: none;
   border-radius: var(--radius-sm);
   padding: 12px 16px;
-  font-family: var(--font-display);
   font-size: 14px;
-  font-weight: 700;
+  font-weight: 600;
   white-space: nowrap;
   transition:
     transform 0.15s ease,
@@ -2085,7 +2016,6 @@
 }
 
 .admin-table-head.inner h2 {
-  font-family: var(--font-display);
   color: var(--brown-dk);
   font-size: 22px;
 }
@@ -2095,7 +2025,6 @@
   color: var(--terra-dk);
   border-radius: 999px;
   padding: 7px 11px;
-  font-family: var(--font-display);
   font-size: 13px;
 }
 
@@ -2120,7 +2049,6 @@
   background: var(--bg);
   color: var(--brown-dk);
   padding: 13px 14px;
-  font-family: var(--font-display);
   font-size: 14px;
   outline: none;
 }
@@ -2135,7 +2063,6 @@
   color: var(--surface);
   border-radius: var(--radius-sm);
   padding: 0 16px;
-  font-family: var(--font-display);
   font-size: 14px;
   white-space: nowrap;
   transition:
@@ -2157,7 +2084,6 @@
   margin-top: -8px;
   text-align: right;
   color: var(--muted);
-  font-family: var(--font-display);
   font-size: 13px;
 }
 
@@ -2167,7 +2093,6 @@
   color: var(--surface);
   border-radius: var(--radius);
   padding: 15px 18px;
-  font-family: var(--font-display);
   font-size: 16px;
   box-shadow: 0 14px 30px rgba(181, 89, 63, 0.18);
   transition:
@@ -2196,7 +2121,6 @@
   border: 1px solid var(--border);
   border-radius: 999px;
   padding: 9px 13px;
-  font-family: var(--font-display);
   font-size: 13px;
   white-space: nowrap;
 }
@@ -2236,7 +2160,6 @@
 .admin-target-item strong {
   display: block;
   color: var(--brown-dk);
-  font-family: var(--font-display);
   font-size: 15px;
   margin-bottom: 3px;
 }
@@ -2251,7 +2174,6 @@
   color: var(--accent-dk);
   border-radius: 999px;
   padding: 6px 9px;
-  font-family: var(--font-display);
   font-size: 11px;
   white-space: nowrap;
 }
@@ -2265,7 +2187,6 @@
   align-items: center;
   justify-content: center;
   padding: 48px 24px;
-  font-family: var(--font-display);
   font-size: 17px;
   color: var(--muted);
   background:
@@ -2331,7 +2252,6 @@
 
 .admin-sms-detail strong {
   color: var(--brown-dk);
-  font-family: var(--font-display);
   font-size: 16px;
 }
 
@@ -2348,7 +2268,6 @@
 }
 
 .admin-recipient-detail-list h3 {
-  font-family: var(--font-display);
   color: var(--brown-dk);
   font-size: 20px;
 }
@@ -2366,7 +2285,6 @@
 
 .admin-recipient-detail-item span {
   color: var(--brown-dk);
-  font-family: var(--font-display);
 }
 
 .admin-recipient-detail-item strong {
@@ -2439,7 +2357,7 @@
   margin-bottom: 10px;
   color: #8a6d4c;
   font-size: 13px;
-  font-weight: 800;
+  font-weight: 600;
   letter-spacing: -0.02em;
 }
 
@@ -2448,7 +2366,7 @@
   margin: 0;
   color: #3f2a1b;
   font-size: 16px;
-  font-weight: 700;
+  font-weight: 600;
   line-height: 1.6;
   word-break: keep-all;
 }
@@ -2474,7 +2392,7 @@
   margin-bottom: 10px;
   color: #8a6d4c;
   font-size: 13px;
-  font-weight: 800;
+  font-weight: 600;
 }
 
 /* 상세 정보 카드 값 */
@@ -2482,7 +2400,7 @@
   display: block;
   color: #3f2a1b;
   font-size: 18px;
-  font-weight: 900;
+  font-weight: 600;
   line-height: 1.45;
   word-break: keep-all;
 }
@@ -2496,7 +2414,7 @@
 .admin-action-modal .admin-table-head h2 {
   color: #3f2a1b;
   font-size: 24px;
-  font-weight: 900;
+  font-weight: 600;
 }
 
 /* 참여자 수 배지 */
@@ -2508,7 +2426,7 @@
   background: #e9c0ae;
   color: #a8472f;
   font-size: 14px;
-  font-weight: 900;
+  font-weight: 600;
   display: inline-flex;
   align-items: center;
   justify-content: center;
@@ -2532,7 +2450,7 @@
   background: #f3ead8;
   color: #3f2a1b;
   font-size: 14px;
-  font-weight: 900;
+  font-weight: 600;
   text-align: left;
   white-space: nowrap;
 }
@@ -2542,7 +2460,7 @@
   border-top: 1px solid #eadcc2;
   color: #3f2a1b;
   font-size: 14px;
-  font-weight: 700;
+  font-weight: 600;
   vertical-align: middle;
 }
 
@@ -2593,7 +2511,7 @@
   margin-bottom: 8px !important;
   color: rgba(234, 219, 184, 0.55) !important;
   font-size: 12px !important;
-  font-weight: 800 !important;
+  font-weight: 600 !important;
   line-height: 1.3 !important;
 }
 
@@ -2601,7 +2519,6 @@
   display: block !important;
   max-width: 100% !important;
   color: var(--surface) !important;
-  font-family: var(--font-display) !important;
   font-size: 24px !important;
   line-height: 1.25 !important;
   letter-spacing: -0.04em !important;
@@ -2670,7 +2587,7 @@
   margin: 0 0 12px !important;
   color: rgba(234, 219, 184, 0.58) !important;
   font-size: 12px !important;
-  font-weight: 800 !important;
+  font-weight: 600 !important;
   line-height: 1.3 !important;
   white-space: nowrap !important;
 }
@@ -2679,7 +2596,6 @@
   display: block !important;
   max-width: 100% !important;
   color: var(--surface) !important;
-  font-family: var(--font-display) !important;
   font-size: 26px !important;
   line-height: 1.25 !important;
   letter-spacing: -0.04em !important;

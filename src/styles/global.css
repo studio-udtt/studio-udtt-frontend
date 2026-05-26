@@ -8,7 +8,6 @@ html,
 body {
   background: var(--bg);
   color: var(--fg);
-  font-family: var(--font-body);
 }
 
 body {
@@ -23,7 +22,6 @@ a {
 }
 
 button {
-  font-family: inherit;
   cursor: pointer;
   border: none;
   background: none;
@@ -33,12 +31,6 @@ button {
 button:disabled {
   cursor: not-allowed;
   opacity: 0.65;
-}
-
-input,
-textarea,
-select {
-  font-family: inherit;
 }
 
 .shell {
@@ -63,7 +55,6 @@ select {
 }
 
 .h-display {
-  font-family: var(--font-display);
   font-size: clamp(32px, 4vw, 48px);
   line-height: 1.2;
   letter-spacing: -0.01em;
@@ -71,7 +62,6 @@ select {
 }
 
 .h-section {
-  font-family: var(--font-display);
   font-size: 28px;
   color: var(--brown-dk);
   margin-bottom: 18px;
@@ -105,7 +95,6 @@ select {
 .btn {
   padding: 13px 28px;
   border-radius: var(--radius);
-  font-family: var(--font-display);
   font-size: 16px;
   transition: all 0.15s;
 }

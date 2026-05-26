@@ -187,7 +187,6 @@ export default function ProjectMap({ projects = [] }) {
             <span className="legend-dot done" />
             완료
           </div>
-          <div className="legend-item">📍 클릭하면 상세보기</div>
         </div>
       </div>
 
