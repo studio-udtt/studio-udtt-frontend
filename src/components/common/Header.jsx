@@ -38,10 +38,6 @@ export default function Header() {
           >
             회사 소개
           </NavLink>
-
-          <NavLink to="/admin/login" className="nav-btn login">
-            관리자 로그인
-          </NavLink>
         </nav>
       </div>
     </header>
