@@ -517,3 +517,18 @@
     grid-template-columns: 1fr;
   }
 }
+.person-photo {
+  width: 72px;
+  height: 72px;
+  border-radius: 22px;
+  object-fit: cover;
+  object-position: center;
+  border: 1px solid var(--border);
+  background: var(--accent-sf);
+  flex-shrink: 0;
+}
+
+.company-people-side .company-person-card {
+  grid-template-columns: 72px 1fr;
+  align-items: start;
+}

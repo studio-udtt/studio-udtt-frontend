@@ -1,3 +1,6 @@
+import chaAramImage from "../assets/images/cha-aram.jpg";
+import yoonJoosunImage from "../assets/images/yoon-joosun.jpg";
+
 export default function AboutPage() {
   return (
     <main className="section">
@@ -10,15 +13,19 @@ export default function AboutPage() {
             함께 만드는 걸 더 중요하게 생각해요.
           </h1>
           <p className="lead">
-            studio&amp;lab 우당탕탕은 지역의 빈 공간을 발견하고, 사람들과 함께
-            고치고 운영하는 공간 프로젝트를 만듭니다.
+            스튜디오 우당탕탕은 지역의 빈 공간을 발견하고, 사람들과 함께 고치고
+            운영하는 공간 프로젝트를 만듭니다.
           </p>
         </div>
 
         <div className="about-layout">
           <aside className="company-people-side">
             <article className="company-person-card">
-              <div className="person-mark">CA</div>
+              <img
+                src={chaAramImage}
+                alt="채아람 대표"
+                className="person-photo"
+              />
               <div>
                 <span>채아람</span>
                 <h3>쓰고 그리고 중재하는 기획자</h3>
@@ -30,7 +37,11 @@ export default function AboutPage() {
             </article>
 
             <article className="company-person-card">
-              <div className="person-mark">YS</div>
+              <img
+                src={yoonJoosunImage}
+                alt="윤주선 교수"
+                className="person-photo"
+              />
               <div>
                 <span>윤주선</span>
                 <h3>건축의 업역을 확장하는 동네 건축가</h3>
