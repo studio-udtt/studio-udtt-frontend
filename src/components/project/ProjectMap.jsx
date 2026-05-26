@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import ProjectInfoPanel from "./ProjectInfoPanel";
 
 function getPinPosition(project) {
@@ -35,16 +35,17 @@ export default function ProjectMap({ projects = [] }) {
   const [selectedIndex, setSelectedIndex] = useState(0);
   const [filter, setFilter] = useState("IN_PROGRESS");
 
+  const handleFilterChange = (nextFilter) => {
+    setFilter(nextFilter);
+    setSelectedIndex(0);
+  };
+
   const filteredProjects = projects.filter((project) => {
     if (filter === "ALL") return true;
     if (filter === "COMPLETED") return project.status === "COMPLETED";
 
     return project.status !== "COMPLETED";
   });
-
-  useEffect(() => {
-    setSelectedIndex(0);
-  }, [filter]);
 
   const safeSelectedIndex =
     filteredProjects.length > 0
@@ -64,7 +65,7 @@ export default function ProjectMap({ projects = [] }) {
           <button
             type="button"
             className={filter === "IN_PROGRESS" ? "on" : ""}
-            onClick={() => setFilter("IN_PROGRESS")}
+            onClick={() => handleFilterChange("IN_PROGRESS")}
           >
             진행중
           </button>
@@ -72,7 +73,7 @@ export default function ProjectMap({ projects = [] }) {
           <button
             type="button"
             className={filter === "COMPLETED" ? "on complete" : "complete"}
-            onClick={() => setFilter("COMPLETED")}
+            onClick={() => handleFilterChange("COMPLETED")}
           >
             완료
           </button>
@@ -80,7 +81,7 @@ export default function ProjectMap({ projects = [] }) {
           <button
             type="button"
             className={filter === "ALL" ? "on" : ""}
-            onClick={() => setFilter("ALL")}
+            onClick={() => handleFilterChange("ALL")}
           >
             전체
           </button>
