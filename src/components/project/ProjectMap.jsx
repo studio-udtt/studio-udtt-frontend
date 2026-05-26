@@ -118,18 +118,30 @@ export default function ProjectMap({ projects = [] }) {
             opacity="0.5"
           />
 
-          <text x="295" y="220" fontSize="13" fill="#8B7355">
+          <text x="292" y="205" fontSize="12" fill="#8B7355">
+            경기
+          </text>
+
+          <text x="330" y="160" fontSize="12" fill="#8B7355">
+            강원
+          </text>
+
+          <text x="285" y="230" fontSize="13" fill="#8B7355">
             서울
           </text>
-          <text x="320" y="280" fontSize="11" fill="#8B7355">
+
+          <text x="318" y="300" fontSize="12" fill="#8B7355">
             충청
           </text>
-          <text x="335" y="395" fontSize="11" fill="#8B7355">
+
+          <text x="345" y="410" fontSize="12" fill="#8B7355">
             경상
           </text>
-          <text x="255" y="430" fontSize="11" fill="#8B7355">
+
+          <text x="255" y="440" fontSize="12" fill="#8B7355">
             전라
           </text>
+
           <text x="225" y="556" fontSize="10" fill="#8B7355">
             제주
           </text>
