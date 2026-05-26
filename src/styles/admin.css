@@ -2418,3 +2418,161 @@
     width: fit-content;
   }
 }
+
+/* 프로젝트 상세 모달 전체 폭 */
+.admin-action-modal {
+  max-width: 960px;
+  width: min(960px, calc(100vw - 40px));
+}
+
+/* 상세 모달 내부 여백 */
+.admin-action-modal .admin-edit-form {
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+}
+
+/* 요약 / 설명 / 주소 영역 카드화 */
+.admin-action-modal .admin-field {
+  padding: 18px 20px;
+  border: 1px solid #e4d3b5;
+  border-radius: 18px;
+  background: #f8f1e4;
+}
+
+/* 요약 / 설명 / 주소 라벨 */
+.admin-action-modal .admin-field label {
+  display: block;
+  margin-bottom: 10px;
+  color: #8a6d4c;
+  font-size: 13px;
+  font-weight: 800;
+  letter-spacing: -0.02em;
+}
+
+/* 요약 / 설명 / 주소 내용 */
+.admin-action-modal .admin-field p {
+  margin: 0;
+  color: #3f2a1b;
+  font-size: 16px;
+  font-weight: 700;
+  line-height: 1.6;
+  word-break: keep-all;
+}
+
+/* 상세 정보 카드 그리드 */
+.admin-action-modal .admin-action-info-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 14px;
+}
+
+/* 상세 정보 카드 */
+.admin-action-modal .admin-action-info-grid > div {
+  padding: 18px 20px;
+  border: 1px solid #e4d3b5;
+  border-radius: 18px;
+  background: #f8f1e4;
+}
+
+/* 상세 정보 카드 제목 */
+.admin-action-modal .admin-action-info-grid span {
+  display: block;
+  margin-bottom: 10px;
+  color: #8a6d4c;
+  font-size: 13px;
+  font-weight: 800;
+}
+
+/* 상세 정보 카드 값 */
+.admin-action-modal .admin-action-info-grid strong {
+  display: block;
+  color: #3f2a1b;
+  font-size: 18px;
+  font-weight: 900;
+  line-height: 1.45;
+  word-break: keep-all;
+}
+
+/* 참여 신청자 제목 영역 */
+.admin-action-modal .admin-table-head {
+  margin-top: 22px;
+  padding-top: 8px;
+}
+
+.admin-action-modal .admin-table-head h2 {
+  color: #3f2a1b;
+  font-size: 24px;
+  font-weight: 900;
+}
+
+/* 참여자 수 배지 */
+.admin-action-modal .admin-table-head span {
+  min-width: 44px;
+  height: 34px;
+  padding: 0 14px;
+  border-radius: 999px;
+  background: #e9c0ae;
+  color: #a8472f;
+  font-size: 14px;
+  font-weight: 900;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* 상세 모달 안 테이블 */
+.admin-action-modal .admin-table-wrap {
+  border: 1px solid #e4d3b5;
+  border-radius: 18px;
+  overflow: hidden;
+  background: #fffaf1;
+}
+
+.admin-action-modal .admin-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.admin-action-modal .admin-table th {
+  padding: 16px 18px;
+  background: #f3ead8;
+  color: #3f2a1b;
+  font-size: 14px;
+  font-weight: 900;
+  text-align: left;
+  white-space: nowrap;
+}
+
+.admin-action-modal .admin-table td {
+  padding: 16px 18px;
+  border-top: 1px solid #eadcc2;
+  color: #3f2a1b;
+  font-size: 14px;
+  font-weight: 700;
+  vertical-align: middle;
+}
+
+/* 긴 이메일/연락처 깨짐 방지 */
+.admin-action-modal .admin-table td {
+  word-break: break-word;
+}
+
+/* 모바일 대응 */
+@media (max-width: 768px) {
+  .admin-action-modal .admin-action-info-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .admin-action-modal {
+    width: calc(100vw - 24px);
+  }
+
+  .admin-action-modal .admin-table-wrap {
+    overflow-x: auto;
+  }
+
+  .admin-action-modal .admin-table {
+    min-width: 720px;
+  }
+}

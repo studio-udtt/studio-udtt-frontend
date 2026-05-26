@@ -498,6 +498,18 @@ export default function AdminRequestsPage() {
       );
     }
 
+    if (type === "approveApplication") {
+      return (
+        <div className="admin-action-confirm-box">
+          <strong>정말 승인 처리할까요?</strong>
+          <p>
+            참여 신청을 승인하면 해당 신청자의 상태가 승인으로 변경됩니다. 계속
+            진행하려면 아래 버튼을 눌러 주세요.
+          </p>
+        </div>
+      );
+    }
+
     if (type === "rejectProject" || type === "rejectApplication") {
       return (
         <div className="admin-field">

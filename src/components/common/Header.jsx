@@ -18,7 +18,7 @@ export default function Header() {
               isActive ? "nav-btn active" : "nav-btn"
             }
           >
-            메인
+            홈
           </NavLink>
 
           <NavLink

@@ -33,3 +33,7 @@ export const cancelApplication = (applicationId) => {
     `/api/v1/admin/applications/${applicationId}/cancel`,
   );
 };
+
+export const getAdminProjectDetail = (projectId) => {
+  return axiosInstance.get(`/api/v1/admin/projects/${projectId}`);
+};

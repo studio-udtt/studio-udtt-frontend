@@ -1,16 +1,51 @@
 import { useEffect, useState } from "react";
 import {
   deleteAdminProject,
+  getAdminProjectDetail,
   getAdminProjects,
   updateAdminProject,
   updateAdminProjectStatus,
 } from "../../api/admin/adminProjectApi";
+import { getAdminApplications } from "../../api/admin/adminApplicationApi";
 
 const STATUS_OPTIONS = ["RECRUITING", "IN_PROGRESS", "COMPLETED", "CANCELED"];
+
+const STATUS_LABELS = {
+  RECRUITING: "모집중",
+  IN_PROGRESS: "진행중",
+  COMPLETED: "완료",
+  CANCELED: "취소",
+  PENDING: "대기",
+  APPROVED: "승인",
+  REJECTED: "반려",
+};
+
+const formatDateTime = (value) => {
+  if (!value) return "-";
+
+  const date = new Date(value);
+
+  if (Number.isNaN(date.getTime())) {
+    return value;
+  }
+
+  return date.toLocaleString("ko-KR", {
+    year: "numeric",
+    month: "2-digit",
+    day: "2-digit",
+    hour: "2-digit",
+    minute: "2-digit",
+  });
+};
 
 export default function AdminProjectsPage() {
   const [projects, setProjects] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
+
+  const [detailProject, setDetailProject] = useState(null);
+  const [detailApplications, setDetailApplications] = useState([]);
+  const [isDetailLoading, setIsDetailLoading] = useState(false);
+
   const [editingProject, setEditingProject] = useState(null);
   const [editForm, setEditForm] = useState({
     title: "",
@@ -25,6 +60,8 @@ export default function AdminProjectsPage() {
   const normalizeList = (data) => {
     if (Array.isArray(data)) return data;
     if (Array.isArray(data?.content)) return data.content;
+    if (Array.isArray(data?.data)) return data.data;
+    if (Array.isArray(data?.data?.content)) return data.data.content;
     if (Array.isArray(data?.projects)) return data.projects;
     return [];
   };
@@ -82,6 +119,36 @@ export default function AdminProjectsPage() {
       ignore = true;
     };
   }, []);
+
+  const openDetailModal = async (project) => {
+    try {
+      setIsDetailLoading(true);
+      setDetailProject(project);
+      setDetailApplications([]);
+
+      const [projectDetailResponse, applicationsResponse] = await Promise.all([
+        getAdminProjectDetail(project.project_id),
+        getAdminApplications({
+          project_id: project.project_id,
+          page: 0,
+          size: 100,
+        }),
+      ]);
+
+      setDetailProject(projectDetailResponse.data);
+      setDetailApplications(normalizeList(applicationsResponse.data));
+    } catch (error) {
+      console.error("프로젝트 상세 조회 실패:", error);
+      alert("프로젝트 상세 정보를 불러오는 중 오류가 발생했습니다.");
+    } finally {
+      setIsDetailLoading(false);
+    }
+  };
+
+  const closeDetailModal = () => {
+    setDetailProject(null);
+    setDetailApplications([]);
+  };
 
   const handleStatusChange = async (projectId, status) => {
     const ok = window.confirm(`프로젝트 상태를 ${status}(으)로 변경할까요?`);
@@ -288,6 +355,14 @@ export default function AdminProjectsPage() {
                           <button
                             type="button"
                             className="admin-action approve"
+                            onClick={() => openDetailModal(project)}
+                          >
+                            상세
+                          </button>
+
+                          <button
+                            type="button"
+                            className="admin-action approve"
                             onClick={() => openEditModal(project)}
                           >
                             수정
@@ -311,6 +386,189 @@ export default function AdminProjectsPage() {
             </div>
           )}
         </section>
+      )}
+
+      {detailProject && (
+        <div className="admin-modal-backdrop">
+          <section className="admin-modal admin-action-modal">
+            <div className="admin-modal-head">
+              <div>
+                <span className="admin-eyebrow">PROJECT DETAIL</span>
+                <h2>프로젝트 상세</h2>
+              </div>
+
+              <button
+                type="button"
+                className="admin-modal-close"
+                onClick={closeDetailModal}
+              >
+                ×
+              </button>
+            </div>
+
+            {isDetailLoading ? (
+              <div className="admin-empty">상세 정보를 불러오는 중입니다.</div>
+            ) : (
+              <div className="admin-edit-form">
+                <div className="admin-action-info-grid">
+                  <div>
+                    <span>프로젝트명</span>
+                    <strong>{detailProject.title || "-"}</strong>
+                  </div>
+
+                  <div>
+                    <span>지역</span>
+                    <strong>
+                      {detailProject.region_sido || "-"}{" "}
+                      {detailProject.region_sigungu || ""}
+                    </strong>
+                  </div>
+
+                  <div>
+                    <span>유형</span>
+                    <strong>{detailProject.project_type || "-"}</strong>
+                  </div>
+
+                  <div>
+                    <span>공간 규모</span>
+                    <strong>{detailProject.space_size || "-"}</strong>
+                  </div>
+
+                  <div>
+                    <span>상태</span>
+                    <strong>
+                      {STATUS_LABELS[detailProject.status] ||
+                        detailProject.status ||
+                        "-"}
+                    </strong>
+                  </div>
+
+                  <div>
+                    <span>참여 인원</span>
+                    <strong>
+                      {detailProject.approved_participant_count || 0} /{" "}
+                      {detailProject.max_participants || "-"}명
+                    </strong>
+                  </div>
+
+                  <div>
+                    <span>노출 여부</span>
+                    <strong>
+                      {detailProject.is_visible ? "노출" : "숨김"}
+                    </strong>
+                  </div>
+
+                  <div>
+                    <span>프로젝트 ID</span>
+                    <strong>{detailProject.project_id || "-"}</strong>
+                  </div>
+                </div>
+
+                <div className="admin-field">
+                  <label>요약</label>
+                  <p>{detailProject.summary || "-"}</p>
+                </div>
+
+                <div className="admin-field">
+                  <label>설명</label>
+                  <p>{detailProject.description || "-"}</p>
+                </div>
+
+                <div className="admin-field">
+                  <label>주소</label>
+                  <p>{detailProject.address || "-"}</p>
+                </div>
+
+                <div className="admin-action-info-grid">
+                  <div>
+                    <span>모집 기간</span>
+                    <strong>
+                      {detailProject.recruit_start_date || "-"} ~{" "}
+                      {detailProject.recruit_end_date || "-"}
+                    </strong>
+                  </div>
+
+                  <div>
+                    <span>프로젝트 기간</span>
+                    <strong>
+                      {detailProject.project_start_date || "-"} ~{" "}
+                      {detailProject.project_end_date || "-"}
+                    </strong>
+                  </div>
+
+                  <div>
+                    <span>위도</span>
+                    <strong>{detailProject.latitude || "-"}</strong>
+                  </div>
+
+                  <div>
+                    <span>경도</span>
+                    <strong>{detailProject.longitude || "-"}</strong>
+                  </div>
+                </div>
+
+                <div className="admin-table-head">
+                  <h2>참여 신청자</h2>
+                  <span>{detailApplications.length}명</span>
+                </div>
+
+                {detailApplications.length === 0 ? (
+                  <div className="admin-empty admin-table-empty">
+                    이 프로젝트에 신청한 참여자가 없습니다.
+                  </div>
+                ) : (
+                  <div className="admin-table-wrap">
+                    <table className="admin-table">
+                      <thead>
+                        <tr>
+                          <th>이름</th>
+                          <th>연락처</th>
+                          <th>이메일</th>
+                          <th>직업</th>
+                          <th>상태</th>
+                          <th>신청일</th>
+                        </tr>
+                      </thead>
+
+                      <tbody>
+                        {detailApplications.map((application) => (
+                          <tr key={application.application_id}>
+                            <td>{application.applicant_name || "-"}</td>
+                            <td>{application.applicant_phone || "-"}</td>
+                            <td>{application.applicant_email || "-"}</td>
+                            <td>{application.job || "-"}</td>
+                            <td>
+                              <span
+                                className={`admin-status ${
+                                  application.status?.toLowerCase() || ""
+                                }`}
+                              >
+                                {STATUS_LABELS[application.status] ||
+                                  application.status ||
+                                  "-"}
+                              </span>
+                            </td>
+                            <td>{formatDateTime(application.created_at)}</td>
+                          </tr>
+                        ))}
+                      </tbody>
+                    </table>
+                  </div>
+                )}
+
+                <div className="admin-modal-actions">
+                  <button
+                    type="button"
+                    className="admin-cancel-btn"
+                    onClick={closeDetailModal}
+                  >
+                    닫기
+                  </button>
+                </div>
+              </div>
+            )}
+          </section>
+        </div>
       )}
 
       {editingProject && (
