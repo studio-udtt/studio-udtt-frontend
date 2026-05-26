@@ -1,5 +1,6 @@
 import { useEffect, useMemo, useState } from "react";
 import axiosInstance from "../../api/axiosInstance";
+import mapImage from "../../assets/images/map.png";
 import ProjectInfoPanel from "./ProjectInfoPanel";
 
 const DEVICE_ID = "ESP32_S3_1";
@@ -495,6 +496,10 @@ function SpaceBreathPanel() {
   );
 }
 
+/*
+  map.png는 입체 지도 이미지라 위도/경도 변환이 완벽한 실제 지도 좌표는 아님.
+  대신 한국 지도 이미지 위에 자연스럽게 핀이 찍히도록 보정값을 둔 방식임.
+*/
 function getPinPosition(project) {
   const latitude = Number(project.latitude);
   const longitude = Number(project.longitude);
@@ -507,16 +512,23 @@ function getPinPosition(project) {
   }
 
   const minLng = 124.5;
-  const maxLng = 131.0;
+  const maxLng = 131.2;
   const minLat = 33.0;
   const maxLat = 38.8;
 
-  const x = ((longitude - minLng) / (maxLng - minLng)) * 100;
-  const y = ((maxLat - latitude) / (maxLat - minLat)) * 100;
+  const rawX = ((longitude - minLng) / (maxLng - minLng)) * 100;
+  const rawY = ((maxLat - latitude) / (maxLat - minLat)) * 100;
+
+  /*
+    이미지가 정면 지도가 아니라 3D 원근이 있어서 약간 보정.
+    핀이 너무 왼쪽/위쪽으로 가면 아래 숫자만 조금씩 조절하면 됨.
+  */
+  const correctedX = rawX * 0.72 + 16;
+  const correctedY = rawY * 0.78 + 8;
 
   return {
-    left: `${Math.min(Math.max(x, 0), 100)}%`,
-    top: `${Math.min(Math.max(y, 0), 100)}%`,
+    left: `${Math.min(Math.max(correctedX, 6), 94)}%`,
+    top: `${Math.min(Math.max(correctedY, 6), 94)}%`,
   };
 }
 
@@ -586,88 +598,43 @@ export default function ProjectMap({ projects = [] }) {
           <div className="l">PROJECTS NATIONWIDE</div>
         </div>
 
-        <svg
-          className="map-illustration"
-          viewBox="0 0 600 600"
-          preserveAspectRatio="xMidYMid meet"
-        >
-          <path
-            d="M 270 90 C 290 80, 320 85, 340 110 C 360 130, 365 160, 350 180 C 365 195, 380 220, 370 245 C 395 260, 410 290, 395 320 C 410 345, 415 380, 395 410 C 380 440, 360 470, 335 490 C 320 510, 305 525, 285 530 C 260 535, 245 520, 240 495 C 220 480, 210 455, 220 430 C 205 410, 195 380, 210 355 C 200 330, 205 300, 220 280 C 210 255, 215 225, 230 205 C 220 180, 230 150, 250 130 C 255 110, 260 95, 270 90 Z"
-            fill="#EADBB8"
-            stroke="#C9B68E"
-            strokeWidth="2"
-            opacity="0.5"
+        <div className="map-image-stage">
+          <img
+            src={mapImage}
+            alt="대한민국 프로젝트 지도"
+            className="map-image"
           />
 
-          <ellipse
-            cx="245"
-            cy="555"
-            rx="32"
-            ry="14"
-            fill="#EADBB8"
-            stroke="#C9B68E"
-            strokeWidth="2"
-            opacity="0.5"
-          />
+          {filteredProjects.map((project, index) => {
+            const { left, top } = getPinPosition(project);
+            const isSelected = safeSelectedIndex === index;
 
-          <text x="292" y="205" fontSize="12" fill="#8B7355">
-            경기
-          </text>
+            return (
+              <button
+                key={project.project_id}
+                type="button"
+                className={`pin ${
+                  project.status === "COMPLETED" ? "done" : "progress"
+                } ${isSelected ? "selected" : ""}`}
+                style={{ left, top }}
+                title={project.title}
+                onClick={() => setSelectedIndex(index)}
+              />
+            );
+          })}
 
-          <text x="330" y="160" fontSize="12" fill="#8B7355">
-            강원
-          </text>
-
-          <text x="285" y="230" fontSize="13" fill="#8B7355">
-            서울
-          </text>
-
-          <text x="318" y="300" fontSize="12" fill="#8B7355">
-            충청
-          </text>
-
-          <text x="345" y="410" fontSize="12" fill="#8B7355">
-            경상
-          </text>
-
-          <text x="255" y="440" fontSize="12" fill="#8B7355">
-            전라
-          </text>
-
-          <text x="225" y="556" fontSize="10" fill="#8B7355">
-            제주
-          </text>
-        </svg>
-
-        {filteredProjects.map((project, index) => {
-          const { left, top } = getPinPosition(project);
-          const isSelected = safeSelectedIndex === index;
-
-          return (
-            <button
-              key={project.project_id}
-              type="button"
-              className={`pin ${
-                project.status === "COMPLETED" ? "done" : "progress"
-              } ${isSelected ? "selected" : ""}`}
-              style={{ left, top }}
-              title={project.title}
-              onClick={() => setSelectedIndex(index)}
-            />
-          );
-        })}
-
-        {selectedProject && (
-          <div
-            className="pin-label"
-            style={{
-              left: selectedPosition.left,
-              top: selectedPosition.top,
-            }}
-          >
-            {selectedProject.region_sigungu}
-          </div>
-        )}
+          {selectedProject && (
+            <div
+              className="pin-label"
+              style={{
+                left: selectedPosition.left,
+                top: selectedPosition.top,
+              }}
+            >
+              {selectedProject.region_sigungu}
+            </div>
+          )}
+        </div>
 
         <div className="map-legend">
           <div className="legend-item">
