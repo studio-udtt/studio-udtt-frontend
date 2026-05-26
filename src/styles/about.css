@@ -8,21 +8,49 @@
 
 .about-layout {
   display: grid;
-  grid-template-columns: 360px 1fr;
+  grid-template-columns: 390px 1fr;
   gap: 36px;
   align-items: start;
 }
 
-.stats-panel {
-  background: var(--brown-dk);
-  border-radius: var(--radius-lg);
-  padding: 36px 32px;
-  color: var(--accent-sf);
+/* 공간의 숨결 패널 */
+.space-breath-panel {
   position: sticky;
   top: 100px;
+  padding: 32px;
+  border-radius: var(--radius-lg);
+  background:
+    linear-gradient(rgba(234, 219, 184, 0.06) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(234, 219, 184, 0.06) 1px, transparent 1px),
+    var(--brown-dk);
+  background-size: 28px 28px;
+  color: var(--accent-sf);
+  overflow: hidden;
 }
 
-.stats-panel .pre {
+.space-breath-panel::before {
+  content: "";
+  position: absolute;
+  right: -80px;
+  top: -80px;
+  width: 220px;
+  height: 220px;
+  border-radius: 999px;
+  background: rgba(214, 160, 77, 0.18);
+  filter: blur(4px);
+}
+
+.space-breath-top {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 18px;
+  margin-bottom: 18px;
+}
+
+.space-breath-panel .pre {
   font-size: 12px;
   letter-spacing: 0.14em;
   color: var(--accent-sf);
@@ -30,50 +58,193 @@
   margin-bottom: 8px;
 }
 
-.stats-panel h3 {
+.space-breath-panel h3 {
   font-family: var(--font-display);
-  font-size: 22px;
+  font-size: 28px;
   color: var(--surface);
-  margin-bottom: 28px;
-  line-height: 1.35;
+  margin: 0;
+  line-height: 1.2;
+  letter-spacing: -0.03em;
 }
 
-.stats-empty {
+.breath-live {
+  flex: 0 0 auto;
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  padding: 8px 11px;
+  border: 1px solid rgba(234, 219, 184, 0.18);
+  border-radius: 999px;
+  color: rgba(234, 219, 184, 0.55);
+  font-size: 11px;
+  font-weight: 900;
+  letter-spacing: 0.08em;
+}
+
+.breath-live span {
+  width: 7px;
+  height: 7px;
+  border-radius: 999px;
+  background: rgba(234, 219, 184, 0.35);
+}
+
+.breath-live.on {
+  color: var(--accent);
+  border-color: rgba(214, 160, 77, 0.4);
+}
+
+.breath-live.on span {
+  background: var(--accent);
+  box-shadow: 0 0 0 5px rgba(214, 160, 77, 0.14);
+}
+
+.space-breath-desc {
+  position: relative;
+  z-index: 1;
+  margin: 0 0 24px;
+  color: rgba(234, 219, 184, 0.68);
+  font-size: 14px;
+  font-weight: 600;
+  line-height: 1.7;
+  word-break: keep-all;
+}
+
+.breath-score-box {
+  position: relative;
+  z-index: 1;
+  display: grid;
+  grid-template-columns: 124px 1fr;
+  gap: 18px;
+  align-items: center;
+  margin-bottom: 18px;
+}
+
+.breath-score-circle {
+  width: 124px;
+  height: 124px;
+  border-radius: 999px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  background:
+    radial-gradient(circle, var(--brown-dk) 55%, transparent 56%),
+    conic-gradient(
+      var(--accent) 0deg,
+      var(--terra) 245deg,
+      rgba(234, 219, 184, 0.16) 245deg
+    );
+  border: 1px solid rgba(234, 219, 184, 0.16);
+}
+
+.breath-score-circle strong {
+  font-family: var(--font-display);
+  color: var(--accent);
+  font-size: 42px;
+  line-height: 1;
+  letter-spacing: -0.05em;
+}
+
+.breath-score-circle span {
+  margin-top: 4px;
+  color: rgba(234, 219, 184, 0.65);
+  font-size: 12px;
+  font-weight: 800;
+}
+
+.breath-score-info span {
+  display: block;
+  margin-bottom: 8px;
+  color: var(--surface);
+  font-size: 15px;
+  font-weight: 900;
+}
+
+.breath-score-info p {
+  margin: 0;
+  color: rgba(234, 219, 184, 0.62);
+  font-size: 12.5px;
+  line-height: 1.6;
+  word-break: keep-all;
+}
+
+.breath-progress {
+  position: relative;
+  z-index: 1;
+  height: 10px;
+  border-radius: 999px;
+  overflow: hidden;
+  background: rgba(234, 219, 184, 0.14);
+  margin-bottom: 20px;
+}
+
+.breath-progress div {
+  height: 100%;
+  border-radius: inherit;
+  background: linear-gradient(90deg, var(--terra), var(--accent));
+}
+
+.breath-empty {
+  position: relative;
+  z-index: 1;
+  padding: 18px 0;
   color: rgba(234, 219, 184, 0.65);
   font-size: 14px;
 }
 
-.stat-row {
-  padding: 18px 0;
-  border-bottom: 1px dashed rgba(234, 219, 184, 0.2);
+.breath-data-grid {
+  position: relative;
+  z-index: 1;
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 12px;
 }
 
-.stat-row:last-child {
-  border-bottom: none;
-  padding-bottom: 0;
+.breath-data-card {
+  min-height: 94px;
+  padding: 16px;
+  border: 1px solid rgba(234, 219, 184, 0.14);
+  border-radius: 18px;
+  background: rgba(255, 250, 241, 0.055);
 }
 
-.stat-row .n {
+.breath-data-card span {
+  display: block;
+  margin-bottom: 10px;
+  color: rgba(234, 219, 184, 0.58);
+  font-size: 12px;
+  font-weight: 800;
+}
+
+.breath-data-card strong {
+  display: block;
+  color: var(--surface);
   font-family: var(--font-display);
-  font-size: 42px;
-  color: var(--accent);
-  line-height: 1;
-  letter-spacing: -0.02em;
+  font-size: 23px;
+  line-height: 1.15;
+  letter-spacing: -0.03em;
+  word-break: keep-all;
 }
 
-.stat-row .n .unit {
-  font-size: 22px;
-  opacity: 0.75;
-  margin-left: 2px;
-  color: var(--accent-sf);
+.breath-data-card p {
+  margin: 8px 0 0;
+  color: rgba(234, 219, 184, 0.55);
+  font-size: 12px;
+  font-weight: 700;
 }
 
-.stat-row .lbl {
-  font-size: 13px;
-  color: rgba(234, 219, 184, 0.65);
-  margin-top: 6px;
+.breath-updated {
+  position: relative;
+  z-index: 1;
+  margin-top: 18px;
+  padding-top: 16px;
+  border-top: 1px dashed rgba(234, 219, 184, 0.2);
+  color: rgba(234, 219, 184, 0.55);
+  font-size: 12px;
+  font-weight: 700;
 }
 
+/* 콘텐츠/크롤링 영역 */
 .articles {
   display: grid;
   gap: 18px;
@@ -92,6 +263,7 @@
 
 .article:hover {
   border-color: var(--accent-dk);
+  transform: translateY(-2px);
 }
 
 .article .thumb {
@@ -139,12 +311,28 @@
     grid-template-columns: 1fr;
   }
 
-  .stats-panel {
+  .space-breath-panel {
     position: static;
   }
 }
 
 @media (max-width: 720px) {
+  .space-breath-panel {
+    padding: 26px 22px;
+  }
+
+  .breath-score-box {
+    grid-template-columns: 1fr;
+  }
+
+  .breath-score-circle {
+    margin: 0 auto;
+  }
+
+  .breath-data-grid {
+    grid-template-columns: 1fr;
+  }
+
   .article {
     grid-template-columns: 1fr;
   }
