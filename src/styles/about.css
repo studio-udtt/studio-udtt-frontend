@@ -490,3 +490,30 @@
     padding: 22px;
   }
 }
+.company-people-side {
+  position: sticky;
+  top: 100px;
+  display: grid;
+  gap: 18px;
+}
+
+.company-people-side .company-person-card {
+  grid-template-columns: 1fr;
+}
+
+.company-people-side .person-mark {
+  margin-bottom: 2px;
+}
+
+@media (max-width: 1100px) {
+  .company-people-side {
+    position: static;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 720px) {
+  .company-people-side {
+    grid-template-columns: 1fr;
+  }
+}

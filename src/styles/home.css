@@ -12,6 +12,7 @@
   gap: 24px;
   height: calc(100vh - 76px - 80px);
   min-height: 580px;
+  min-height: 0;
   padding: 24px 0;
 }
 
@@ -21,6 +22,7 @@
   border: 1px solid var(--border);
   position: relative;
   overflow: hidden;
+  min-height: 0;
 }
 
 .map-area::before {
@@ -198,12 +200,14 @@
   background: var(--brown);
 }
 
+/* 기본 프로젝트 정보 패널 */
 .info-panel {
   background: var(--surface);
   border-radius: var(--radius-lg);
   border: 1px solid var(--border);
   padding: 28px;
   overflow-y: auto;
+  min-height: 0;
 }
 
 .info-panel .region-tag {
@@ -322,13 +326,102 @@
   background: var(--terra);
 }
 
+/* 홈 화면 완료 프로젝트 - 공간의 숨결 패널 */
+.space-breath-panel.home-breath-panel {
+  position: relative;
+  top: auto;
+  align-self: stretch;
+
+  height: 100%;
+  max-height: calc(100vh - 76px - 80px);
+  min-height: 0;
+
+  overflow-y: auto !important;
+  overflow-x: hidden !important;
+  overscroll-behavior: contain;
+
+  padding: 28px;
+}
+
+/* 스크롤바 */
+.space-breath-panel.home-breath-panel::-webkit-scrollbar {
+  width: 8px;
+}
+
+.space-breath-panel.home-breath-panel::-webkit-scrollbar-track {
+  background: rgba(234, 219, 184, 0.08);
+  border-radius: 999px;
+}
+
+.space-breath-panel.home-breath-panel::-webkit-scrollbar-thumb {
+  background: rgba(234, 219, 184, 0.35);
+  border-radius: 999px;
+}
+
+.space-breath-panel.home-breath-panel::-webkit-scrollbar-thumb:hover {
+  background: rgba(234, 219, 184, 0.5);
+}
+
+/* 홈 오른쪽 패널에서는 내용 압축 */
+.space-breath-panel.home-breath-panel .space-breath-top {
+  margin-bottom: 16px;
+}
+
+.space-breath-panel.home-breath-panel .space-breath-desc {
+  margin-bottom: 22px;
+}
+
+.space-breath-panel.home-breath-panel .breath-score-box {
+  grid-template-columns: 1fr;
+  justify-items: center;
+  text-align: center;
+  gap: 14px;
+}
+
+.space-breath-panel.home-breath-panel .breath-score-circle {
+  width: 120px;
+  height: 120px;
+}
+
+.space-breath-panel.home-breath-panel .breath-score-circle strong {
+  font-size: 40px;
+}
+
+.space-breath-panel.home-breath-panel .breath-progress {
+  margin-bottom: 18px;
+}
+
+.space-breath-panel.home-breath-panel .breath-data-grid {
+  grid-template-columns: 1fr;
+}
+
+.space-breath-panel.home-breath-panel .breath-data-card {
+  min-height: auto;
+  padding: 14px 16px;
+}
+
+.space-breath-panel.home-breath-panel .breath-data-card strong {
+  font-size: 20px;
+}
+
+.space-breath-panel.home-breath-panel .breath-updated {
+  padding-bottom: 4px;
+}
+
 @media (max-width: 1100px) {
   .map-layout {
     grid-template-columns: 1fr;
     height: auto;
+    min-height: 0;
   }
 
   .map-area {
     min-height: 480px;
+  }
+
+  .space-breath-panel.home-breath-panel {
+    height: auto;
+    max-height: none;
+    overflow-y: visible !important;
   }
 }

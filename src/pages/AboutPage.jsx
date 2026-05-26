@@ -1,132 +1,4 @@
-import { useEffect, useMemo, useState } from "react";
-import axiosInstance from "../api/axiosInstance";
-
-const DEVICE_ID = "ESP32_S3_1";
-
-const DEFAULT_TELEMETRY = {
-  device_id: DEVICE_ID,
-  breathOfSpaceIndex: 0,
-  currentPeopleCount: 0,
-  totalVisitorCount: 0,
-  isMoving: false,
-  globalPeakToPeak: 0,
-  soundStatus: "-",
-  globalLux: 0,
-  luxStatus: "-",
-  updated_at: null,
-};
-
-const normalizeTelemetry = (data) => {
-  const source = data?.data || data || {};
-
-  return {
-    device_id: source.device_id || source.deviceId || DEVICE_ID,
-    breathOfSpaceIndex:
-      source.breathOfSpaceIndex ??
-      source.breath_of_space_index ??
-      DEFAULT_TELEMETRY.breathOfSpaceIndex,
-    currentPeopleCount:
-      source.currentPeopleCount ??
-      source.current_people_count ??
-      DEFAULT_TELEMETRY.currentPeopleCount,
-    totalVisitorCount:
-      source.totalVisitorCount ??
-      source.total_visitor_count ??
-      DEFAULT_TELEMETRY.totalVisitorCount,
-    isMoving: source.isMoving ?? source.is_moving ?? DEFAULT_TELEMETRY.isMoving,
-    globalPeakToPeak:
-      source.globalPeakToPeak ??
-      source.global_peak_to_peak ??
-      DEFAULT_TELEMETRY.globalPeakToPeak,
-    soundStatus:
-      source.soundStatus ??
-      source.sound_status ??
-      DEFAULT_TELEMETRY.soundStatus,
-    globalLux:
-      source.globalLux ?? source.global_lux ?? DEFAULT_TELEMETRY.globalLux,
-    luxStatus:
-      source.luxStatus ?? source.lux_status ?? DEFAULT_TELEMETRY.luxStatus,
-    updated_at:
-      source.updated_at ||
-      source.updatedAt ||
-      source.created_at ||
-      source.createdAt ||
-      null,
-  };
-};
-
-const formatUpdatedAt = (value) => {
-  if (!value) return "아직 수신된 데이터가 없습니다.";
-
-  const date = new Date(value);
-
-  if (Number.isNaN(date.getTime())) {
-    return value;
-  }
-
-  return date.toLocaleString("ko-KR", {
-    month: "2-digit",
-    day: "2-digit",
-    hour: "2-digit",
-    minute: "2-digit",
-  });
-};
-
 export default function AboutPage() {
-  const [telemetry, setTelemetry] = useState(DEFAULT_TELEMETRY);
-  const [isTelemetryLoading, setIsTelemetryLoading] = useState(true);
-  const [isTelemetryLive, setIsTelemetryLive] = useState(false);
-
-  useEffect(() => {
-    let ignore = false;
-
-    const fetchTelemetry = async () => {
-      try {
-        const response = await axiosInstance.get(
-          "/api/v1/space/telemetry/latest",
-          {
-            params: {
-              device_id: DEVICE_ID,
-            },
-          },
-        );
-
-        if (!ignore) {
-          setTelemetry(normalizeTelemetry(response.data));
-          setIsTelemetryLive(true);
-        }
-      } catch (error) {
-        console.warn("공간의 숨결 데이터 조회 실패:", error);
-
-        if (!ignore) {
-          setTelemetry(DEFAULT_TELEMETRY);
-          setIsTelemetryLive(false);
-        }
-      } finally {
-        if (!ignore) {
-          setIsTelemetryLoading(false);
-        }
-      }
-    };
-
-    fetchTelemetry();
-
-    const timer = window.setInterval(fetchTelemetry, 5000);
-
-    return () => {
-      ignore = true;
-      window.clearInterval(timer);
-    };
-  }, []);
-
-  const breathIndex = useMemo(() => {
-    const value = Number(telemetry.breathOfSpaceIndex);
-
-    if (Number.isNaN(value)) return 0;
-
-    return Math.min(Math.max(value, 0), 100);
-  }, [telemetry.breathOfSpaceIndex]);
-
   return (
     <main className="section">
       <div className="shell">
@@ -144,87 +16,30 @@ export default function AboutPage() {
         </div>
 
         <div className="about-layout">
-          <aside className="space-breath-panel">
-            <div className="space-breath-top">
+          <aside className="company-people-side">
+            <article className="company-person-card">
+              <div className="person-mark">CA</div>
               <div>
-                <div className="pre">SPACE BREATH</div>
-                <h3>공간의 숨결</h3>
-              </div>
-
-              <div
-                className={isTelemetryLive ? "breath-live on" : "breath-live"}
-              >
-                <span />
-                {isTelemetryLive ? "LIVE" : "WAITING"}
-              </div>
-            </div>
-
-            <p className="space-breath-desc">
-              IoT 센서가 수집한 인원, 움직임, 소음, 조도 데이터를 바탕으로
-              공간의 현재 활성도를 보여줍니다.
-            </p>
-
-            <div className="breath-score-box">
-              <div className="breath-score-circle">
-                <strong>{breathIndex}</strong>
-                <span>/ 100</span>
-              </div>
-
-              <div className="breath-score-info">
-                <span>공간의 숨결 지수</span>
+                <span>채아람</span>
+                <h3>쓰고 그리고 중재하는 기획자</h3>
                 <p>
-                  인원 40%, 소음 40%, 조도 20%와 움직임 가산점을 반영합니다.
+                  스튜디오 우당탕탕의 대표로, 장소와 사람 사이의 이야기를
+                  발견하고 지역 활성화 프로젝트를 기획합니다.
                 </p>
               </div>
-            </div>
+            </article>
 
-            <div className="breath-progress">
-              <div style={{ width: `${breathIndex}%` }} />
-            </div>
-
-            {isTelemetryLoading ? (
-              <div className="breath-empty">
-                센서 데이터를 불러오는 중입니다.
+            <article className="company-person-card">
+              <div className="person-mark">YS</div>
+              <div>
+                <span>윤주선</span>
+                <h3>건축의 업역을 확장하는 동네 건축가</h3>
+                <p>
+                  우당탕탕 Lab.을 기반으로 DIT와 지역재생의 개념을 연구하고,
+                  스튜디오 우당탕탕과 함께 프로젝트를 공동기획합니다.
+                </p>
               </div>
-            ) : (
-              <div className="breath-data-grid">
-                <div className="breath-data-card">
-                  <span>현재 인원</span>
-                  <strong>{telemetry.currentPeopleCount}명</strong>
-                </div>
-
-                <div className="breath-data-card">
-                  <span>누적 방문자</span>
-                  <strong>{telemetry.totalVisitorCount}명</strong>
-                </div>
-
-                <div className="breath-data-card">
-                  <span>움직임</span>
-                  <strong>{telemetry.isMoving ? "감지됨" : "정적"}</strong>
-                </div>
-
-                <div className="breath-data-card">
-                  <span>소음 상태</span>
-                  <strong>{telemetry.soundStatus}</strong>
-                  <p>{telemetry.globalPeakToPeak} P-P</p>
-                </div>
-
-                <div className="breath-data-card">
-                  <span>조도 상태</span>
-                  <strong>{telemetry.luxStatus}</strong>
-                  <p>{telemetry.globalLux} lx</p>
-                </div>
-
-                <div className="breath-data-card">
-                  <span>기기 ID</span>
-                  <strong>{telemetry.device_id}</strong>
-                </div>
-              </div>
-            )}
-
-            <div className="breath-updated">
-              마지막 수신: {formatUpdatedAt(telemetry.updated_at)}
-            </div>
+            </article>
           </aside>
 
           <section className="company-section">
@@ -293,32 +108,6 @@ export default function AboutPage() {
                 과정을 중요하게 생각합니다.
               </p>
             </article>
-
-            <div className="company-people-grid">
-              <article className="company-person-card">
-                <div className="person-mark">CA</div>
-                <div>
-                  <span>채아람</span>
-                  <h3>쓰고 그리고 중재하는 기획자</h3>
-                  <p>
-                    스튜디오 우당탕탕의 대표로, 장소와 사람 사이의 이야기를
-                    발견하고 지역 활성화 프로젝트를 기획합니다.
-                  </p>
-                </div>
-              </article>
-
-              <article className="company-person-card">
-                <div className="person-mark">YS</div>
-                <div>
-                  <span>윤주선</span>
-                  <h3>건축의 업역을 확장하는 동네 건축가</h3>
-                  <p>
-                    우당탕탕 Lab.을 기반으로 DIT와 지역재생의 개념을 연구하고,
-                    스튜디오 우당탕탕과 함께 프로젝트를 공동기획합니다.
-                  </p>
-                </div>
-              </article>
-            </div>
           </section>
         </div>
       </div>
