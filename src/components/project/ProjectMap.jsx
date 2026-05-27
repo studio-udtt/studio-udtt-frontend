@@ -457,13 +457,13 @@ function SpaceBreathPanel() {
 
             <div className="breath-data-card">
               <span>움직임</span>
-              <strong>{telemetry.isMoving ? "감지됨" : "정적"}</strong>
+              <strong>{telemetry.soundStatus}</strong>
+              <p>{telemetry.globalPeakToPeak} P-P</p>
             </div>
 
             <div className="breath-data-card">
               <span>소음 상태</span>
-              <strong>{telemetry.soundStatus}</strong>
-              <p>{telemetry.globalPeakToPeak} P-P</p>
+              <strong>{telemetry.isMoving ? "감지됨" : "정적"}</strong>
             </div>
 
             <div className="breath-data-card">
