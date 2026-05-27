@@ -1,6 +1,7 @@
 import { useEffect, useMemo, useState } from "react";
 import axiosInstance from "../../api/axiosInstance";
 import mapImage from "../../assets/images/map.png";
+import { formatKoreaDateTime, formatKoreaTime } from "../../utils/dateTime";
 import ProjectInfoPanel from "./ProjectInfoPanel";
 
 const DEVICE_ID = "ESP32_S3_1";
@@ -58,33 +59,16 @@ const normalizeTelemetry = (data) => {
 };
 
 const formatUpdatedAt = (value) => {
-  if (!value) return "아직 수신된 데이터가 없습니다.";
-
-  const date = new Date(value);
-
-  if (Number.isNaN(date.getTime())) {
-    return value;
-  }
-
-  return date.toLocaleString("ko-KR", {
-    month: "2-digit",
-    day: "2-digit",
-    hour: "2-digit",
-    minute: "2-digit",
+  return formatKoreaDateTime(value, {
+    fallback: "아직 수신된 데이터가 없습니다.",
+    format: {
+      year: undefined,
+    },
   });
 };
 
 const formatChartTime = (value) => {
-  if (!value) return "-";
-
-  const date = new Date(value);
-
-  if (Number.isNaN(date.getTime())) return "-";
-
-  return date.toLocaleTimeString("ko-KR", {
-    hour: "2-digit",
-    minute: "2-digit",
-  });
+  return formatKoreaTime(value);
 };
 
 const clampNumber = (value, min = 0, max = 100) => {

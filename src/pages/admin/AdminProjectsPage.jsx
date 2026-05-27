@@ -7,6 +7,7 @@ import {
   updateAdminProjectStatus,
 } from "../../api/admin/adminProjectApi";
 import { getAdminApplications } from "../../api/admin/adminApplicationApi";
+import { formatKoreaDateTime } from "../../utils/dateTime";
 
 const STATUS_OPTIONS = ["RECRUITING", "IN_PROGRESS", "COMPLETED", "CANCELED"];
 
@@ -20,23 +21,7 @@ const STATUS_LABELS = {
   REJECTED: "반려",
 };
 
-const formatDateTime = (value) => {
-  if (!value) return "-";
-
-  const date = new Date(value);
-
-  if (Number.isNaN(date.getTime())) {
-    return value;
-  }
-
-  return date.toLocaleString("ko-KR", {
-    year: "numeric",
-    month: "2-digit",
-    day: "2-digit",
-    hour: "2-digit",
-    minute: "2-digit",
-  });
-};
+const formatDateTime = (value) => formatKoreaDateTime(value);
 
 export default function AdminProjectsPage() {
   const [projects, setProjects] = useState([]);
