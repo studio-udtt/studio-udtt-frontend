@@ -280,7 +280,7 @@ function SpaceBreathDetailModal({ telemetry, history, breathIndex, onClose }) {
               <span>숨결</span>
               <span>인원</span>
               <span>방문자</span>
-              <span>소음</span>
+              <span>P-P</span>
               <span>조도</span>
             </div>
 
