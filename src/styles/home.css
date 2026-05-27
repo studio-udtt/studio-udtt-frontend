@@ -64,12 +64,12 @@
 }
 
 .map-toolbar button.on {
-  background: var(--brown-dk);
-  color: var(--accent-sf);
+  background: var(--terra);
+  color: var(--surface);
 }
 
 .map-toolbar button.on.complete {
-  background: var(--terra);
+  background: var(--brown);
   color: var(--surface);
 }
 
