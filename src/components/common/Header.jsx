@@ -5,7 +5,7 @@ export default function Header() {
     <header className="header">
       <div className="shell header-inner">
         <Link to="/" className="logo">
-          <span className="name">스튜디오 우당탕탕</span>
+          <span className="name">TEAM 우당탕탕</span>
         </Link>
 
         <nav className="nav">
